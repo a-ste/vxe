@@ -1,67 +1,86 @@
-use glutin::{GlRequest, WindowedContext, EventsLoop};
-use glutin::Api::OpenGl;
-use glutin::dpi::LogicalSize;
-use gfx::handle::{RenderTargetView, DepthStencilView};
-use gfx_device_gl::{Factory, Resources};
-use gfx::Device;
+use luminance_windowing::{WindowDim, WindowOpt};
+use luminance_glfw::GlfwSurface;
+use glfw::{WindowEvent, Key, Action, Context, SwapInterval};
+use std::time::Instant;
+use luminance::context::GraphicsContext;
+use luminance::pipeline::PipelineState;
 
 pub mod builder;
 
+
 #[allow(dead_code)]
 pub struct Instance {
-    window: WindowedContext,
-    device: gfx_device_gl::Device,
-    factory: Factory,
-    color_view: RenderTargetView<Resources, ColorFormat>,
-    depth_view: DepthStencilView<Resources, DepthFormat>,
-    events_loop: EventsLoop,
+    surface: GlfwSurface
 }
-
-pub type ColorFormat = gfx::format::Srgba8;
-pub type DepthFormat = gfx::format::DepthStencil;
 
 impl Instance {
     pub(crate) fn init(title: String, resolution: [u32; 2], vsync: bool) -> Instance {
-        let events_loop = glutin::EventsLoop::new();
-        let window_builder = glutin::WindowBuilder::new()
-            .with_title(title)
-            .with_dimensions(LogicalSize::from((resolution[0], resolution[1])));
-        let context_builder = glutin::ContextBuilder::new()
-            .with_gl(GlRequest::Specific(OpenGl,(3,2)))
-            .with_vsync(vsync);
-        let (window, device, factory, color_view, depth_view) =
-            gfx_window_glutin::init::<ColorFormat, DepthFormat>(window_builder, context_builder, &events_loop).unwrap();
+        let dim = WindowDim::Windowed {
+            width: resolution[0],
+            height: resolution[1],
+        };
+
+        let mut surface = GlfwSurface::new_gl33(title, WindowOpt::default().set_dim(dim)).unwrap();
+
+        surface.context.window.glfw.set_swap_interval(
+            if vsync { SwapInterval::Adaptive } else { SwapInterval::None }
+        );
 
         Instance {
-            window,
-            device,
-            factory,
-            color_view,
-            depth_view,
-            events_loop
+            surface
         }
     }
 
     pub fn run_loop(&mut self) {
-        let mut running = true;
+        let start_t = Instant::now();
+        let mut ctxt = &mut self.surface.context;
+        let events = &mut self.surface.events_rx;
+        let back_buffer = ctxt.back_buffer().expect("back buffer");
 
-        while running {
-            self.events_loop.poll_events(|event| {
-                if let glutin::Event::WindowEvent {event, .. } = event {
-                    match event {
-                        glutin::WindowEvent::CloseRequested |
-                        glutin::WindowEvent::KeyboardInput {
-                            input: glutin::KeyboardInput {
-                                virtual_keycode: Some(glutin::VirtualKeyCode::Escape), ..
-                            }, ..
-                        } => running = false,
-                        _ => {}
-                    }
+        let mut frm = 0;
+        let mut fps = 0;
+        let mut last = start_t.elapsed().as_secs();
+
+        'app: loop {
+            // handle events
+            ctxt.window.glfw.poll_events();
+            for (_, event) in glfw::flush_messages(&events) {
+                match event {
+                    WindowEvent::Close | WindowEvent::Key(Key::Escape, _, Action::Release, _) => break 'app,
+                    _ => ()
                 }
-            });
+            }
 
-            self.window.swap_buffers().unwrap();
-            self.device.cleanup();
+
+            if last == start_t.elapsed().as_secs() {
+                frm += 1;
+            } else {
+                fps = frm;
+                println!("FPS {}", fps);
+                frm = 0;
+            }
+            last = start_t.elapsed().as_secs();
+
+
+            // rendering code goes here
+            let t = start_t.elapsed().as_secs_f32();
+            let color = [t.cos(), t.sin(), 0.5, 1.];
+
+            let render = ctxt
+                .new_pipeline_gate()
+                .pipeline(
+                    &back_buffer,
+                    &PipelineState::default().set_clear_color(color),
+                    |_, _| Ok(())
+                )
+                .assume();
+
+            // swap buffer chain
+            if render.is_ok() {
+                ctxt.window.swap_buffers();
+            } else {
+                break 'app;
+            }
         }
     }
 }
