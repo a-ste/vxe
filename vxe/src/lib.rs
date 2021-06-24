@@ -1,4 +1,6 @@
-mod internal;
+mod instance;
+mod data;
+mod context;
 
-pub use internal::instance::Instance;
-pub use internal::instance::builder::InstanceBuilder;
+pub use instance::Instance;
+pub use instance::builder::InstanceBuilder;

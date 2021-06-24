@@ -10,7 +10,8 @@ pub mod builder;
 
 #[allow(dead_code)]
 pub struct Instance {
-    surface: GlfwSurface
+    surface: GlfwSurface,
+    fps: u32,
 }
 
 impl Instance {
@@ -27,7 +28,8 @@ impl Instance {
         );
 
         Instance {
-            surface
+            surface,
+            fps: 0,
         }
     }
 
@@ -38,7 +40,6 @@ impl Instance {
         let back_buffer = ctxt.back_buffer().expect("back buffer");
 
         let mut frm = 0;
-        let mut fps = 0;
         let mut last = start_t.elapsed().as_secs();
 
         'app: loop {
@@ -50,17 +51,6 @@ impl Instance {
                     _ => ()
                 }
             }
-
-
-            if last == start_t.elapsed().as_secs() {
-                frm += 1;
-            } else {
-                fps = frm;
-                println!("FPS {}", fps);
-                frm = 0;
-            }
-            last = start_t.elapsed().as_secs();
-
 
             // rendering code goes here
             let t = start_t.elapsed().as_secs_f32();
@@ -74,6 +64,15 @@ impl Instance {
                     |_, _| Ok(())
                 )
                 .assume();
+
+            // fps counter
+            if last == start_t.elapsed().as_secs() {
+                frm += 1;
+            } else {
+                self.fps = frm;
+                frm = 0;
+            }
+            last = start_t.elapsed().as_secs();
 
             // swap buffer chain
             if render.is_ok() {
