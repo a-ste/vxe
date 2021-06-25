@@ -1,5 +1,5 @@
 [package]
-name = "vxe"
+name = "vxe-renderer"
 version = "0.1.0"
 authors = ["TheJebForge <jeb@thejebforge.com>"]
 edition = "2018"
@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 glfw = "*"
 luminance = "*"
+luminance-gl = "*"
 luminance-glfw = "*"
 luminance-windowing = "*"
 luminance-derive = "*"

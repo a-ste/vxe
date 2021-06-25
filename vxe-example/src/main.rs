@@ -1,10 +1,10 @@
-use vxe::{InstanceBuilder};
+use vxe_renderer::{RendererBuilder};
 
 fn main() {
-    let mut instance = InstanceBuilder::new()
+    let mut renderer = RendererBuilder::new()
         .title("hi")
         .vsync(true)
         .build();
 
-    instance.run_loop();
+    renderer.run_loop();
 }

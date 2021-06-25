@@ -1,12 +1,15 @@
 use luminance_glfw::GL33Context;
 use crate::data::Vertex;
 use luminance::context::GraphicsContext;
+use luminance_gl::GL33;
 use luminance::tess::{Mode, Interleaved, Tess};
 
+#[allow(dead_code)]
 pub struct Context {
     ctx: GL33Context
 }
 
+#[allow(dead_code)]
 impl Context {
     pub fn new(ctx: GL33Context) -> Context {
         Context {

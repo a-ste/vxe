@@ -9,13 +9,13 @@ pub mod builder;
 
 
 #[allow(dead_code)]
-pub struct Instance {
+pub struct Renderer {
     surface: GlfwSurface,
     fps: u32,
 }
 
-impl Instance {
-    pub(crate) fn init(title: String, resolution: [u32; 2], vsync: bool) -> Instance {
+impl Renderer {
+    pub(crate) fn init(title: String, resolution: [u32; 2], vsync: bool) -> Renderer {
         let dim = WindowDim::Windowed {
             width: resolution[0],
             height: resolution[1],
@@ -27,7 +27,7 @@ impl Instance {
             if vsync { SwapInterval::Adaptive } else { SwapInterval::None }
         );
 
-        Instance {
+        Renderer {
             surface,
             fps: 0,
         }
