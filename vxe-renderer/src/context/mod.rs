@@ -46,7 +46,7 @@ impl Context<'_> {
     }
 
     /// Creates a new tesselation
-    pub fn new_tess(&mut self, vertices: Vec<Vertex>) -> LumTess {
+    pub fn new_tess(&mut self, vertices: &Vec<Vertex>) -> LumTess {
         self.ctx.new_tess()
             .set_vertices(vertices.as_slice())
             .set_mode(Mode::Triangle)

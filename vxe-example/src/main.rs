@@ -3,8 +3,9 @@ use vxe_renderer::{
     RendererBuilder
 };
 use vxe_renderer::handler::Handler;
-use vxe_renderer::context::{Context, LumProgram, LumTess};
+use vxe_renderer::context::{Context, LumProgram};
 use std::time::Instant;
+use std::f32::consts::PI;
 
 const VERTICES: [Vertex; 3] = [
     Vertex::new(
@@ -46,7 +47,7 @@ void main() {
 
 pub struct ExampleHandler {
     shd: Option<LumProgram>,
-    tess: Option<LumTess>,
+    tess: Vec<Vertex>,
     start: Instant,
     last_sec: u64,
 }
@@ -54,13 +55,32 @@ pub struct ExampleHandler {
 impl Handler for ExampleHandler {
     fn init(&mut self, ctx: &mut Context) {
         self.shd = Some(ctx.new_shader_program(VS, FS));
-        self.tess = Some(ctx.new_tess(VERTICES.to_vec()));
     }
 
     fn draw(&mut self, ctx: &mut Context) {
         let back_buffer = &ctx.back_buffer();
         let mut shader = self.shd.as_mut().unwrap();
-        let tess = self.tess.as_ref().unwrap();
+
+        let time = self.start.elapsed().as_secs_f32();
+
+        let vert = &mut self.tess;
+
+        vert[0] = Vertex::new(
+            VertexPosition::new([-0.5 + (time + (2.0 * PI) / 3.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 + PI).sin() / 3.0]),
+            VertexRGB::new([255, 0, 0]),
+        );
+
+        vert[1] = Vertex::new(
+            VertexPosition::new([0.5 + (time + (2.0 * PI) / 3.0 * 2.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 * 2.0 + PI).sin() / 3.0]),
+            VertexRGB::new([0, 255, 0]),
+        );
+
+        vert[2] = Vertex::new(
+            VertexPosition::new([0. + (time).sin() / 3.0, 0.5 + (time + PI).sin() / 3.0]),
+            VertexRGB::new([0, 0, 255]),
+        );
+
+        let tess = ctx.new_tess(vert);
 
         ctx.pipeline(back_buffer, |mut pc| {
             pc.use_shader(&mut shader, |mut rc| {
@@ -81,12 +101,12 @@ impl Handler for ExampleHandler {
 fn main() {
     let mut renderer = RendererBuilder::new()
         .title("hi")
-        .vsync(true)
+        .vsync(false)
         .build();
 
     let handler = ExampleHandler {
         shd: None,
-        tess: None,
+        tess: VERTICES.to_vec(),
         start: Instant::now(),
         last_sec: 0,
     };
