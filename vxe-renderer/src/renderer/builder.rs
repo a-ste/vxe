@@ -1,5 +1,6 @@
 use super::Renderer;
 
+/// Renderer builder, so instancing it would make more sense
 pub struct RendererBuilder {
     title: String,
     resolution: [u32; 2],
