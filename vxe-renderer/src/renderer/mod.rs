@@ -42,7 +42,7 @@ impl Renderer {
         let mut ctxt = &mut self.surface.context;
         let events = &mut self.surface.events_rx;
 
-        handler.init(&mut VXEContext::new(&mut ctxt));
+        handler.init(&mut VXEContext::new(&mut ctxt, self.fps));
 
         let mut frm = 0;
         let mut last = start_t.elapsed().as_secs();
@@ -66,7 +66,7 @@ impl Renderer {
             }
             last = start_t.elapsed().as_secs();
 
-            handler.draw(&mut VXEContext::new(&mut ctxt));
+            handler.draw(&mut VXEContext::new(&mut ctxt, self.fps));
 
             // swap buffers
             ctxt.window.swap_buffers();

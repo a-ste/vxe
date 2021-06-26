@@ -4,6 +4,7 @@ use vxe_renderer::{
 };
 use vxe_renderer::handler::Handler;
 use vxe_renderer::context::{Context, LumProgram, LumTess};
+use std::time::Instant;
 
 const VERTICES: [Vertex; 3] = [
     Vertex::new(
@@ -45,7 +46,9 @@ void main() {
 
 pub struct ExampleHandler {
     shd: Option<LumProgram>,
-    tess: Option<LumTess>
+    tess: Option<LumTess>,
+    start: Instant,
+    last_sec: u64,
 }
 
 impl Handler for ExampleHandler {
@@ -66,6 +69,12 @@ impl Handler for ExampleHandler {
                 })
             })
         });
+
+        if self.last_sec != self.start.elapsed().as_secs() {
+            println!("{} fps", ctx.get_fps());
+        }
+
+        self.last_sec = self.start.elapsed().as_secs();
     }
 }
 
@@ -75,7 +84,12 @@ fn main() {
         .vsync(true)
         .build();
 
-    let handler = ExampleHandler { shd: None, tess: None };
+    let handler = ExampleHandler {
+        shd: None,
+        tess: None,
+        start: Instant::now(),
+        last_sec: 0,
+    };
 
     renderer.run_loop(handler);
 }

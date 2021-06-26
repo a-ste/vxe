@@ -24,14 +24,16 @@ pub type LumFrameBuffer = Framebuffer<GL33, Dim2, (), ()>;
 /// Struct that will be passed to Handler's functions
 #[allow(dead_code)]
 pub struct Context<'a> {
-    ctx: &'a mut GL33Context
+    ctx: &'a mut GL33Context,
+    fps: u32,
 }
 
 #[allow(dead_code)]
 impl Context<'_> {
-    pub(crate) fn new(ctx: &mut GL33Context) -> Context {
+    pub(crate) fn new(ctx: &mut GL33Context, fps: u32) -> Context {
         Context {
-            ctx
+            ctx,
+            fps
         }
     }
 
@@ -66,6 +68,11 @@ impl Context<'_> {
     /// Retrieves back buffer for rendering onto screen
     pub fn back_buffer(&mut self) -> LumFrameBuffer {
         self.ctx.back_buffer().unwrap()
+    }
+
+    /// Gets FPS
+    pub fn get_fps(&self) -> u32 {
+        self.fps
     }
 }
 
