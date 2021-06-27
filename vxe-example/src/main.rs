@@ -50,6 +50,7 @@ pub struct ExampleHandler {
     tess: Vec<Vertex>,
     start: Instant,
     last_sec: u64,
+    lean: f32,
 }
 
 impl Handler for ExampleHandler {
@@ -61,14 +62,14 @@ impl Handler for ExampleHandler {
         let back_buffer = &ctx.back_buffer();
         let mut shader = self.shd.as_mut().unwrap();
 
-        let time = self.start.elapsed().as_secs_f32();
+        // let time = self.start.elapsed().as_secs_f32();
 
         let vert = &mut self.tess;
 
-        // vert[0] = Vertex::new(
-        //     VertexPosition::new([-0.5 + (time + (2.0 * PI) / 3.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 + PI / 3.0).sin() / 3.0]),
-        //     VertexRGB::new([255, 0, 0]),
-        // );
+        vert[0] = Vertex::new(
+            VertexPosition::new([-0.5 - self.lean, -0.5]),
+            VertexRGB::new([255, 0, 0]),
+        );
         //
         // vert[1] = Vertex::new(
         //     VertexPosition::new([0.5 + (time + (2.0 * PI) / 3.0 * 2.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 * 2.0 + PI / 3.0).sin() / 3.0]),
@@ -82,12 +83,13 @@ impl Handler for ExampleHandler {
 
         let tess = ctx.new_tess(vert);
 
-        let r = (time).sin() / 2.0 + 0.5;
-        let g = (time + (2.0 * PI) / 3.0).sin() / 2.0 + 0.5;
-        let b = (time + (2.0 * PI) / 3.0 * 2.0).sin() / 2.0 + 0.5;
+        // let r = (time).sin() / 2.0 + 0.5;
+        // let g = (time + (2.0 * PI) / 3.0).sin() / 2.0 + 0.5;
+        // let b = (time + (2.0 * PI) / 3.0 * 2.0).sin() / 2.0 + 0.5;
 
+        self.lean += ctx.delta() / 10.0;
 
-        ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([r, g, b, 1.0]), |mut pc| {
+        ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([0.0, 0.0, 0.0, 1.0]), |mut pc| {
             pc.use_shader(&mut shader, |mut rc| {
                 rc.render(RenderState::default(),|mut tc| {
                     tc.draw(&tess)
@@ -96,7 +98,7 @@ impl Handler for ExampleHandler {
         });
 
         if self.last_sec != self.start.elapsed().as_secs() {
-            println!("{} fps", ctx.get_fps());
+            println!("{} fps", ctx.fps());
         }
 
         self.last_sec = self.start.elapsed().as_secs();
@@ -107,6 +109,7 @@ fn main() {
     let mut renderer = RendererBuilder::new()
         .title("hi")
         .vsync(false)
+        .fps_limit(200)
         .build();
 
     let handler = ExampleHandler {
@@ -114,6 +117,7 @@ fn main() {
         tess: VERTICES.to_vec(),
         start: Instant::now(),
         last_sec: 0,
+        lean: 0.0,
     };
 
     renderer.run_loop(handler);

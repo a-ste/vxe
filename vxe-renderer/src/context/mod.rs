@@ -32,14 +32,16 @@ pub type LumFrameBuffer = Framebuffer<GL33, Dim2, (), ()>;
 pub struct Context<'a> {
     ctx: &'a mut GL33Context,
     fps: u32,
+    delta: f32,
 }
 
 #[allow(dead_code)]
 impl Context<'_> {
-    pub(crate) fn new(ctx: &mut GL33Context, fps: u32) -> Context {
+    pub(crate) fn new(ctx: &mut GL33Context, fps: u32, delta: f32) -> Context {
         Context {
             ctx,
-            fps
+            fps,
+            delta
         }
     }
 
@@ -77,8 +79,13 @@ impl Context<'_> {
     }
 
     /// Gets FPS
-    pub fn get_fps(&self) -> u32 {
+    pub fn fps(&self) -> u32 {
         self.fps
+    }
+
+    /// Gets delta time between frames
+    pub fn delta(&self) -> f32 {
+        self.delta
     }
 }
 
