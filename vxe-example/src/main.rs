@@ -7,10 +7,11 @@ use vxe_renderer::handler::Handler;
 use vxe_renderer::context::{Context, LumProgram, PipelineState, RenderState};
 use std::time::Instant;
 
-const VERTICES: [Vertex; 3] = [
+const VERTICES: [Vertex; 4] = [
     vertex![-0.5, -0.5, 0.0, 255, 0, 0],
     vertex![0.5, -0.5, 0.0, 0, 255, 0],
-    vertex![0., 0.5, 0.0, 0, 0, 255],
+    vertex![0.5, 0.5, 0.0, 0, 0, 255],
+    vertex![-0.5, 0.5, 0.0, 255, 255, 255],
 ];
 
 const VS: &'static str = r#"
@@ -57,9 +58,9 @@ impl Handler for ExampleHandler {
 
         let vert = &mut self.tess;
 
-        vert[0] = vertex![-0.5 - self.lean, -0.5, 0.0, 255, 0, 0];
+        //vert[0] = vertex![-0.5 - self.lean, -0.5, 0.0, 255, 0, 0];
 
-        let tess = ctx.new_tess(vert, &[0, 1, 2].to_vec());
+        let tess = ctx.new_tess(vert, &[0, 2, 1, 0, 3, 2].to_vec());
 
         // let r = (time).sin() / 2.0 + 0.5;
         // let g = (time + (2.0 * PI) / 3.0).sin() / 2.0 + 0.5;
@@ -69,7 +70,9 @@ impl Handler for ExampleHandler {
 
         ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([0.0, 0.0, 0.0, 1.0]), |mut pc| {
             pc.use_shader(&mut shader, |mut rc| {
-                rc.render(RenderState::default(),|mut tc| {
+                rc.render(RenderState::default()
+                              .set_face_culling(FaceCulling::new(FaceCullingOrder::CW, FaceCullingMode::Back)),
+                          |mut tc| {
                     tc.draw(&tess)
                 })
             })
