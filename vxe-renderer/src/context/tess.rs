@@ -4,7 +4,7 @@ use crate::context::LumTess;
 use luminance::tess::TessView;
 use luminance::pipeline::PipelineError;
 
-/// Struct that will be passed whenever you draw with render context, has functions for drawing triangles
+/// Tesselation context for drawing triangles
 #[allow(dead_code)]
 pub struct TessContext<'a> {
     tess_gate: TessGate<'a, GL33>

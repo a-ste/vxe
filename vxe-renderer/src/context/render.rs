@@ -4,7 +4,7 @@ use luminance::pipeline::PipelineError;
 use crate::context::tess::TessContext;
 use luminance::render_state::RenderState;
 
-/// Struct that will be passed whenever you bind a shader, has useful functions for actually rendering things
+/// Render context for drawing tessellations
 #[allow(dead_code)]
 pub struct RenderContext<'a> {
     rdr_gate: RenderGate<'a, GL33>

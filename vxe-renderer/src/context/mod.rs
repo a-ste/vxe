@@ -27,7 +27,7 @@ pub type LumTess = Tess<GL33, Vertex, (), (), Interleaved>;
 /// Backend type for Frame Buffers
 pub type LumFrameBuffer = Framebuffer<GL33, Dim2, (), ()>;
 
-/// Struct that will be passed to Handler's functions
+/// Context for creating things and rendering
 #[allow(dead_code)]
 pub struct Context<'a> {
     ctx: &'a mut GL33Context,

@@ -3,7 +3,7 @@ use luminance_gl::GL33;
 use luminance::pipeline::{Pipeline, PipelineError};
 use crate::context::{LumProgram, RenderContext};
 
-/// Struct that will be passed whenever you create a pipeline, has useful functions like binding shaders
+/// Pipeline context for binding shaders
 #[allow(dead_code)]
 pub struct PipelineContext<'a> {
     pipeline: Pipeline<'a, GL33>,
