@@ -5,7 +5,7 @@ pub struct RendererBuilder {
     title: String,
     resolution: [u32; 2],
     vsync: bool,
-    fps_limit: u32,
+    fps_limit: f32,
 }
 
 impl RendererBuilder {
@@ -15,7 +15,7 @@ impl RendererBuilder {
             title: "A good game".to_string(),
             resolution: [640, 480],
             vsync: true,
-            fps_limit: 0,
+            fps_limit: 0.0,
         }
     }
 
@@ -35,7 +35,7 @@ impl RendererBuilder {
     }
 
     /// Sets fps limit
-    pub fn fps_limit(mut self, fps_limit: u32) -> RendererBuilder {
+    pub fn fps_limit(mut self, fps_limit: f32) -> RendererBuilder {
         self.fps_limit = fps_limit; self
     }
 

@@ -15,7 +15,7 @@ pub use luminance::face_culling::FaceCullingOrder;
 pub enum VertexSemantics {
     #[sem(name = "position", repr = "[f32; 3]", wrapper = "VertexPosition")]
     Position,
-    #[sem(name = "color", repr = "[u8; 3]", wrapper = "VertexRGB")]
+    #[sem(name = "color", repr = "[f32; 3]", wrapper = "VertexRGB")]
     Color,
 }
 
@@ -26,6 +26,5 @@ pub struct Vertex {
     position: VertexPosition,
 
     #[allow(dead_code)]
-    #[vertex(normalized = "true")]
     color: VertexRGB,
 }

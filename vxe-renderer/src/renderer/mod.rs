@@ -13,13 +13,13 @@ pub mod builder;
 #[allow(dead_code)]
 pub struct Renderer {
     surface: GlfwSurface,
-    limit: u32,
+    limit: f32,
     fps: u32,
     delta: f32,
 }
 
 impl Renderer {
-    pub(crate) fn init(title: String, resolution: [u32; 2], vsync: bool, limit: u32) -> Renderer {
+    pub(crate) fn init(title: String, resolution: [u32; 2], vsync: bool, limit: f32) -> Renderer {
         let dim = WindowDim::Windowed {
             width: resolution[0],
             height: resolution[1],
@@ -85,9 +85,9 @@ impl Renderer {
             last_render = after_render;
 
             // fps limiter
-            let limit_delta = 1.0 / (self.limit as f32 + 1.0) - (after_render - last_limit);
+            let limit_delta = 1.0 / (self.limit + 1.0) - (after_render - last_limit);
 
-            if self.limit > 0 {
+            if self.limit > 0.0001 {
                 if limit_delta > 0.0 {
                     thread::sleep(Duration::from_secs_f32(limit_delta));
                 }

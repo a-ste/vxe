@@ -6,12 +6,13 @@ use vxe_renderer::{
 use vxe_renderer::handler::Handler;
 use vxe_renderer::context::{Context, LumProgram, PipelineState, RenderState};
 use std::time::Instant;
+use std::f32::consts::PI;
 
 const VERTICES: [Vertex; 4] = [
-    vertex![-0.5, -0.5, 0.0, 255, 0, 0],
-    vertex![0.5, -0.5, 0.0, 0, 255, 0],
-    vertex![0.5, 0.5, 0.0, 0, 0, 255],
-    vertex![-0.5, 0.5, 0.0, 255, 255, 255],
+    vertex![-1.0, -1.0, 0.0, 1.0, 0.0, 0.0],
+    vertex![1.0, -1.0, 0.0, 0.0, 1.0, 0.0],
+    vertex![1.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+    vertex![-1.0, 1.0, 0.0, 1.0, 1.0, 1.0],
 ];
 
 const VS: &'static str = r#"
@@ -43,6 +44,7 @@ pub struct ExampleHandler {
     start: Instant,
     last_sec: u64,
     lean: f32,
+    span: f32,
 }
 
 impl Handler for ExampleHandler {
@@ -54,17 +56,23 @@ impl Handler for ExampleHandler {
         let back_buffer = &ctx.back_buffer();
         let mut shader = self.shd.as_mut().unwrap();
 
-        // let time = self.start.elapsed().as_secs_f32();
-
         let vert = &mut self.tess;
 
-        //vert[0] = vertex![-0.5 - self.lean, -0.5, 0.0, 255, 0, 0];
+        self.span += ctx.delta() * 3.0;
+        let time = self.span;
+
+        let phase1 = time;
+        let phase2 = time + (2.0 * PI) / 4.0;
+        let phase3 = time + (2.0 * PI) / 4.0 * 2.0;
+        let phase4 = time + (2.0 * PI) / 4.0 * 3.0;
+
+
+        vert[0] = vertex![-1.0, -1.0, 0.0, phase1.sin() / 2.0 + 0.5, phase2.sin() / 2.0 + 0.5, phase3.sin() / 2.0 + 0.5];
+        vert[1] = vertex![1.0, -1.0, 0.0,  phase2.sin() / 2.0 + 0.5, phase3.sin() / 2.0 + 0.5, phase4.sin() / 2.0 + 0.5];
+        vert[2] = vertex![1.0, 1.0, 0.0,   phase3.sin() / 2.0 + 0.5, phase4.sin() / 2.0 + 0.5, phase1.sin() / 2.0 + 0.5];
+        vert[3] = vertex![-1.0, 1.0, 0.0,  phase4.sin() / 2.0 + 0.5, phase1.sin() / 2.0 + 0.5, phase2.sin() / 2.0 + 0.5];
 
         let tess = ctx.new_tess(vert, &[0, 2, 1, 0, 3, 2].to_vec());
-
-        // let r = (time).sin() / 2.0 + 0.5;
-        // let g = (time + (2.0 * PI) / 3.0).sin() / 2.0 + 0.5;
-        // let b = (time + (2.0 * PI) / 3.0 * 2.0).sin() / 2.0 + 0.5;
 
         self.lean += ctx.delta() / 10.0;
 
@@ -90,7 +98,7 @@ fn main() {
     let mut renderer = RendererBuilder::new()
         .title("hi")
         .vsync(false)
-        .fps_limit(200)
+        .fps_limit(23.976)
         .build();
 
     let handler = ExampleHandler {
@@ -99,6 +107,7 @@ fn main() {
         start: Instant::now(),
         last_sec: 0,
         lean: 0.0,
+        span: 0.0,
     };
 
     renderer.run_loop(handler);
