@@ -1,25 +1,16 @@
 use vxe_renderer::{
     data::*,
-    RendererBuilder
+    RendererBuilder,
+    vertex
 };
 use vxe_renderer::handler::Handler;
 use vxe_renderer::context::{Context, LumProgram, PipelineState, RenderState};
 use std::time::Instant;
-use std::f32::consts::PI;
 
 const VERTICES: [Vertex; 3] = [
-    Vertex::new(
-        VertexPosition::new([-0.5, -0.5]),
-        VertexRGB::new([255, 0, 0]),
-    ),
-    Vertex::new(
-        VertexPosition::new([0.5, -0.5]),
-        VertexRGB::new([0, 255, 0]),
-    ),
-    Vertex::new(
-        VertexPosition::new([0., 0.5]),
-        VertexRGB::new([0, 0, 255])
-    ),
+    vertex![-0.5, -0.5, 0.0, 255, 0, 0],
+    vertex![0.5, -0.5, 0.0, 0, 255, 0],
+    vertex![0., 0.5, 0.0, 0, 0, 255],
 ];
 
 const VS: &'static str = r#"
@@ -66,22 +57,9 @@ impl Handler for ExampleHandler {
 
         let vert = &mut self.tess;
 
-        vert[0] = Vertex::new(
-            VertexPosition::new([-0.5 - self.lean, -0.5]),
-            VertexRGB::new([255, 0, 0]),
-        );
-        //
-        // vert[1] = Vertex::new(
-        //     VertexPosition::new([0.5 + (time + (2.0 * PI) / 3.0 * 2.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 * 2.0 + PI / 3.0).sin() / 3.0]),
-        //     VertexRGB::new([0, 255, 0]),
-        // );
-        //
-        // vert[2] = Vertex::new(
-        //     VertexPosition::new([0. + (time).sin() / 3.0, 0.5 + (time + PI / 3.0).sin() / 3.0]),
-        //     VertexRGB::new([0, 0, 255]),
-        // );
+        vert[0] = vertex![-0.5 - self.lean, -0.5, 0.0, 255, 0, 0];
 
-        let tess = ctx.new_tess(vert);
+        let tess = ctx.new_tess(vert, &[0, 1, 2].to_vec());
 
         // let r = (time).sin() / 2.0 + 0.5;
         // let g = (time + (2.0 * PI) / 3.0).sin() / 2.0 + 0.5;

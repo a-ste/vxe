@@ -1,8 +1,10 @@
+mod macros;
+
 use luminance_derive::{Semantics, Vertex};
 
 #[derive(Copy, Clone, Debug, Semantics)]
 pub enum VertexSemantics {
-    #[sem(name = "position", repr = "[f32; 2]", wrapper = "VertexPosition")]
+    #[sem(name = "position", repr = "[f32; 3]", wrapper = "VertexPosition")]
     Position,
     #[sem(name = "color", repr = "[u8; 3]", wrapper = "VertexRGB")]
     Color,

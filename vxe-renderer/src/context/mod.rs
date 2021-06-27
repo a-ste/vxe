@@ -22,7 +22,7 @@ mod tess;
 pub type LumProgram = Program<GL33, VertexSemantics, (), ()>;
 
 /// Backend type for Tesselation, a set of vertices or pretty much all the mesh data that will be sent to GPU
-pub type LumTess = Tess<GL33, Vertex, (), (), Interleaved>;
+pub type LumTess = Tess<GL33, Vertex, u32, (), Interleaved>;
 
 /// Backend type for Frame Buffers
 pub type LumFrameBuffer = Framebuffer<GL33, Dim2, (), ()>;
@@ -54,9 +54,10 @@ impl Context<'_> {
     }
 
     /// Creates a new tesselation
-    pub fn new_tess(&mut self, vertices: &Vec<Vertex>) -> LumTess {
+    pub fn new_tess(&mut self, vertices: &Vec<Vertex>, indices: &Vec<u32>) -> LumTess {
         self.ctx.new_tess()
             .set_vertices(vertices.as_slice())
+            .set_indices(indices.as_slice())
             .set_mode(Mode::Triangle)
             .build()
             .unwrap()
