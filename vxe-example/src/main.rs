@@ -3,7 +3,7 @@ use vxe_renderer::{
     RendererBuilder
 };
 use vxe_renderer::handler::Handler;
-use vxe_renderer::context::{Context, LumProgram};
+use vxe_renderer::context::{Context, LumProgram, PipelineState};
 use std::time::Instant;
 use std::f32::consts::PI;
 
@@ -65,24 +65,29 @@ impl Handler for ExampleHandler {
 
         let vert = &mut self.tess;
 
-        vert[0] = Vertex::new(
-            VertexPosition::new([-0.5 + (time + (2.0 * PI) / 3.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 + PI).sin() / 3.0]),
-            VertexRGB::new([255, 0, 0]),
-        );
-
-        vert[1] = Vertex::new(
-            VertexPosition::new([0.5 + (time + (2.0 * PI) / 3.0 * 2.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 * 2.0 + PI).sin() / 3.0]),
-            VertexRGB::new([0, 255, 0]),
-        );
-
-        vert[2] = Vertex::new(
-            VertexPosition::new([0. + (time).sin() / 3.0, 0.5 + (time + PI).sin() / 3.0]),
-            VertexRGB::new([0, 0, 255]),
-        );
+        // vert[0] = Vertex::new(
+        //     VertexPosition::new([-0.5 + (time + (2.0 * PI) / 3.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 + PI / 3.0).sin() / 3.0]),
+        //     VertexRGB::new([255, 0, 0]),
+        // );
+        //
+        // vert[1] = Vertex::new(
+        //     VertexPosition::new([0.5 + (time + (2.0 * PI) / 3.0 * 2.0).sin() / 3.0, -0.5 + (time + (2.0 * PI) / 3.0 * 2.0 + PI / 3.0).sin() / 3.0]),
+        //     VertexRGB::new([0, 255, 0]),
+        // );
+        //
+        // vert[2] = Vertex::new(
+        //     VertexPosition::new([0. + (time).sin() / 3.0, 0.5 + (time + PI / 3.0).sin() / 3.0]),
+        //     VertexRGB::new([0, 0, 255]),
+        // );
 
         let tess = ctx.new_tess(vert);
 
-        ctx.pipeline(back_buffer, |mut pc| {
+        let r = (time).sin() / 2.0 + 0.5;
+        let g = (time + (2.0 * PI) / 3.0).sin() / 2.0 + 0.5;
+        let b = (time + (2.0 * PI) / 3.0 * 2.0).sin() / 2.0 + 0.5;
+
+
+        ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([r, g, b, 1.0]), |mut pc| {
             pc.use_shader(&mut shader, |mut rc| {
                 rc.render(|mut tc| {
                     tc.draw(&tess)

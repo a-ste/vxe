@@ -5,8 +5,13 @@ use luminance::framebuffer::Framebuffer;
 use luminance_gl::GL33;
 use luminance::texture::Dim2;
 use luminance_glfw::GL33Context;
-use luminance::pipeline::{PipelineError, PipelineState, Render};
+use luminance::pipeline::{PipelineError, Render};
 use crate::data::{Vertex, VertexSemantics};
+
+pub use pipeline::PipelineContext;
+pub use render::RenderContext;
+pub use tess::TessContext;
+pub use luminance::pipeline::PipelineState;
 
 mod render;
 mod pipeline;
@@ -55,12 +60,12 @@ impl Context<'_> {
     }
 
     /// Creates a pipeline and runs the closure
-    pub fn pipeline<F>(&mut self, buffer: &LumFrameBuffer, func: F) -> Render<PipelineError>
+    pub fn pipeline<F>(&mut self, buffer: &LumFrameBuffer, state: PipelineState, func: F) -> Render<PipelineError>
         where
             F: FnOnce(PipelineContext) -> Result<(), PipelineError>
     {
         self.ctx.new_pipeline_gate()
-            .pipeline(buffer, &PipelineState::default(), |pipeline, shd_gate| {
+            .pipeline(buffer, &state, |pipeline, shd_gate| {
                 func(PipelineContext::new(pipeline, shd_gate))
             }).assume()
     }
@@ -76,6 +81,4 @@ impl Context<'_> {
     }
 }
 
-pub use pipeline::PipelineContext;
-pub use render::RenderContext;
-pub use tess::TessContext;
+
