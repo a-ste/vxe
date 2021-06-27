@@ -34,6 +34,7 @@ impl Renderer {
         }
     }
 
+    /// Runs the renderer loop, under the hood handles window events and runs handler's functions
     pub fn run_loop<H>(&mut self, mut handler: H)
     where
         H: Handler

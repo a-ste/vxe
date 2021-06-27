@@ -1,6 +1,7 @@
 //! Renderer crate for vxe-engine
 //!
 //! This crate shouldn't be used by itself, unless you're interested in working on your own engine with help of this renderer crate
+#[warn(missing_docs)]
 
 mod renderer;
 
