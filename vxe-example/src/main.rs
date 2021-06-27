@@ -3,7 +3,7 @@ use vxe_renderer::{
     RendererBuilder
 };
 use vxe_renderer::handler::Handler;
-use vxe_renderer::context::{Context, LumProgram, PipelineState};
+use vxe_renderer::context::{Context, LumProgram, PipelineState, RenderState};
 use std::time::Instant;
 use std::f32::consts::PI;
 
@@ -89,7 +89,7 @@ impl Handler for ExampleHandler {
 
         ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([r, g, b, 1.0]), |mut pc| {
             pc.use_shader(&mut shader, |mut rc| {
-                rc.render(|mut tc| {
+                rc.render(RenderState::default(),|mut tc| {
                     tc.draw(&tess)
                 })
             })

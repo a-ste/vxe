@@ -19,11 +19,11 @@ impl RenderContext<'_> {
     }
 
     /// Prepares render state and runs the closure
-    pub fn render<F>(&mut self, func: F) -> Result<(), PipelineError>
+    pub fn render<F>(&mut self, state: RenderState, func: F) -> Result<(), PipelineError>
         where
             F: FnOnce(TessContext) -> Result<(), PipelineError>
     {
-        self.rdr_gate.render(&RenderState::default(), |tess_gate| {
+        self.rdr_gate.render(&state, |tess_gate| {
             func(TessContext::new(tess_gate))
         })
     }

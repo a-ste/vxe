@@ -12,6 +12,7 @@ pub use pipeline::PipelineContext;
 pub use render::RenderContext;
 pub use tess::TessContext;
 pub use luminance::pipeline::PipelineState;
+pub use luminance::render_state::RenderState;
 
 mod render;
 mod pipeline;
