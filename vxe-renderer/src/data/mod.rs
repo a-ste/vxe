@@ -11,6 +11,14 @@ pub use luminance::face_culling::FaceCulling;
 pub use luminance::face_culling::FaceCullingMode;
 pub use luminance::face_culling::FaceCullingOrder;
 
+/// Contains required re-exports for shd_interface macro to work
+pub mod shader {
+    pub use luminance;
+    pub use luminance::UniformInterface;
+    pub use luminance::shader::Uniform;
+}
+
+
 #[derive(Copy, Clone, Debug, Semantics)]
 pub enum VertexSemantics {
     #[sem(name = "position", repr = "[f32; 3]", wrapper = "VertexPosition")]

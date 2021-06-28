@@ -1,5 +1,5 @@
 use luminance::context::GraphicsContext;
-use luminance::shader::Program;
+use luminance::shader::{Program, UniformInterface};
 use luminance::tess::{Interleaved, Mode, Tess};
 use luminance::framebuffer::Framebuffer;
 use luminance_gl::GL33;
@@ -19,7 +19,7 @@ mod pipeline;
 mod tess;
 
 /// Backend type for Shader program
-pub type LumProgram = Program<GL33, VertexSemantics, (), ()>;
+pub type LumProgram<I> = Program<GL33, VertexSemantics, (), I>;
 
 /// Backend type for Tesselation, a set of vertices or pretty much all the mesh data that will be sent to GPU
 pub type LumTess = Tess<GL33, Vertex, u32, (), Interleaved>;
@@ -46,8 +46,11 @@ impl Context<'_> {
     }
 
     /// Loads shader code and creates a program
-    pub fn new_shader_program(&mut self, vertex: &str, fragment: &str) -> LumProgram {
-        self.ctx.new_shader_program::<VertexSemantics, (), ()>()
+    pub fn new_shader_program<I>(&mut self, vertex: &str, fragment: &str) -> LumProgram<I>
+        where
+            I: UniformInterface<GL33>
+    {
+        self.ctx.new_shader_program::<VertexSemantics, (), I>()
             .from_strings(vertex, None, None, fragment)
             .unwrap()
             .ignore_warnings()

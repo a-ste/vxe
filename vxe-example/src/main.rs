@@ -1,7 +1,8 @@
 use vxe_renderer::{
-    data::*,
+    data::{*, shader::*},
     RendererBuilder,
-    vertex
+    vertex,
+    shd_interface
 };
 use vxe_renderer::handler::Handler;
 use vxe_renderer::context::{Context, LumProgram, PipelineState, RenderState};
@@ -33,13 +34,21 @@ in vec3 v_color;
 
 out vec4 frag_color;
 
+uniform float intensity;
+
 void main() {
-  frag_color = vec4(v_color, 1.0);
+  frag_color = vec4(v_color, 1.0) * intensity;
 }
 "#;
 
+shd_interface!(
+    BasicShader,
+    intensity, f32
+);
+
+
 pub struct ExampleHandler {
-    shd: Option<LumProgram>,
+    shd: Option<LumProgram<BasicShader>>,
     tess: Vec<Vertex>,
     start: Instant,
     last_sec: u64,
@@ -58,14 +67,13 @@ impl Handler for ExampleHandler {
 
         let vert = &mut self.tess;
 
-        self.span += ctx.delta() * 3.0;
+        self.span += ctx.delta() * 15.0;
         let time = self.span;
 
         let phase1 = time;
         let phase2 = time + (2.0 * PI) / 4.0;
         let phase3 = time + (2.0 * PI) / 4.0 * 2.0;
         let phase4 = time + (2.0 * PI) / 4.0 * 3.0;
-
 
         vert[0] = vertex![-1.0, -1.0, 0.0, phase1.sin() / 2.0 + 0.5, phase2.sin() / 2.0 + 0.5, phase3.sin() / 2.0 + 0.5];
         vert[1] = vertex![1.0, -1.0, 0.0,  phase2.sin() / 2.0 + 0.5, phase3.sin() / 2.0 + 0.5, phase4.sin() / 2.0 + 0.5];
@@ -77,7 +85,9 @@ impl Handler for ExampleHandler {
         self.lean += ctx.delta() / 10.0;
 
         ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([0.0, 0.0, 0.0, 1.0]), |mut pc| {
-            pc.use_shader(&mut shader, |mut rc| {
+            pc.use_shader(&mut shader, |mut rc, uni| {
+                rc.set_uniform(&uni.intensity, phase1.sin() / 2.0 + 0.5);
+
                 rc.render(RenderState::default()
                               .set_face_culling(FaceCulling::new(FaceCullingOrder::CW, FaceCullingMode::Back)),
                           |mut tc| {
@@ -98,7 +108,7 @@ fn main() {
     let mut renderer = RendererBuilder::new()
         .title("hi")
         .vsync(false)
-        .fps_limit(23.976)
+        .fps_limit(200.0)
         .build();
 
     let handler = ExampleHandler {

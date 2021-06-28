@@ -2,6 +2,7 @@ use luminance::shading_gate::ShadingGate;
 use luminance_gl::GL33;
 use luminance::pipeline::{Pipeline, PipelineError};
 use crate::context::{LumProgram, RenderContext};
+use luminance::shader::UniformInterface;
 
 /// Pipeline context for binding shaders
 #[allow(dead_code)]
@@ -20,12 +21,13 @@ impl PipelineContext<'_> {
     }
 
     /// Binds specified shader and runs the closure
-    pub fn use_shader<F>(&mut self, shader: &mut LumProgram, func: F) -> Result<(), PipelineError>
+    pub fn use_shader<I, F>(&mut self, shader: &mut LumProgram<I>, func: F) -> Result<(), PipelineError>
         where
-            F: FnOnce(RenderContext) -> Result<(), PipelineError>
+            F: FnOnce(RenderContext, &I) -> Result<(), PipelineError>,
+            I: UniformInterface<GL33>
     {
-        self.shd_gate.shade(shader, |_, _, rdr_gate| {
-            func(RenderContext::new(rdr_gate))
+        self.shd_gate.shade(shader, |iface, uni, rdr_gate| {
+            func(RenderContext::new(iface, rdr_gate), uni)
         })
     }
 }

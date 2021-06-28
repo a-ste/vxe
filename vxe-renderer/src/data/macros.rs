@@ -19,3 +19,17 @@ macro_rules! vertex {
         }
     };
 }
+
+/// Macro for creation of shader interfaces, import of data::shader::* is required for it to work
+#[macro_export]
+macro_rules! shd_interface {
+    ($sn:ident, $($n:ident, $t:ty),*) => {
+        #[derive(Debug, UniformInterface)]
+        struct $sn {
+            $(
+                #[uniform(unbound)]
+                $n: Uniform<$t>,
+            )*
+        }
+    }
+}
