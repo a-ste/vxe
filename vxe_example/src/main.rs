@@ -17,33 +17,37 @@ const VERTICES: [Vertex; 4] = [
 ];
 
 const VS: &'static str = r#"
-in vec2 position;
+in vec3 position;
 in vec3 color;
 
 out vec3 v_color;
+out vec3 v_position;
 
 void main() {
   v_color = color;
+  v_position = position;
 
-  gl_Position = vec4(position, 0., 1.);
+  gl_Position = vec4(position, 1.);
 }
 "#;
 
 const FS: &'static str = r#"
 in vec3 v_color;
+in vec3 v_position;
 
 out vec4 frag_color;
 
-uniform float intensity;
+uniform float time;
 
 void main() {
-  frag_color = vec4(v_color, 1.0) * intensity;
+  frag_color = vec4(v_color, 1.0) * clamp(tan(v_position.y * 50 - (time * 3)) / 2 + 0.5, 0.0, 1.0);
 }
 "#;
 
 shd_interface!(
     BasicShader,
-    intensity, f32
+    intensity, f32,
+    time, f32
 );
 
 
@@ -67,7 +71,7 @@ impl Handler for ExampleHandler {
 
         let vert = &mut self.tess;
 
-        self.span += ctx.delta() * 15.0;
+        self.span += ctx.delta() * 5.0;
         let time = self.span;
 
         let phase1 = time;
@@ -86,7 +90,8 @@ impl Handler for ExampleHandler {
 
         ctx.pipeline(back_buffer, PipelineState::default().set_clear_color([0.0, 0.0, 0.0, 1.0]), |mut pc| {
             pc.use_shader(&mut shader, |mut rc, uni| {
-                rc.set_uniform(&uni.intensity, phase1.sin() / 2.0 + 0.5);
+                rc.set_uniform(&uni.intensity, phase1.sin() / 2.0 + 1.0);
+                rc.set_uniform(&uni.time, time);
 
                 rc.render(RenderState::default()
                               .set_face_culling(FaceCulling::new(FaceCullingOrder::CW, FaceCullingMode::Back)),
@@ -106,9 +111,9 @@ impl Handler for ExampleHandler {
 
 fn main() {
     let mut renderer = RendererBuilder::new()
-        .title("hi")
+        .title("ksu yu hui")
         .vsync(false)
-        .fps_limit(200.0)
+        .fps_limit(69.0)
         .build();
 
     let handler = ExampleHandler {

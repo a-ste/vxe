@@ -1,4 +1,6 @@
-//! Renderer crate for vxe-engine
+//! Renderer crate for vxe_engine
+//!
+//! Essentially is a simplification of luminance API, a glorious wrapper, so I can have everything work how I want it to work
 //!
 //! This crate shouldn't be used by itself, unless you're interested in working on your own engine with help of this renderer crate
 #[warn(missing_docs)]

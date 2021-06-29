@@ -1,0 +1,20 @@
+[package]
+name = "vxe_engine"
+version = "0.1.0"
+authors = ["TheJebForge <jeb@thejebforge.com>"]
+edition = "2018"
+default-run = "vxe_editor"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "vxe_engine"
+path = "src/lib.rs"
+
+[[bin]]
+name = "vxe_editor"
+path = "src/editor/main.rs"
+
+
+
+
+[dependencies]

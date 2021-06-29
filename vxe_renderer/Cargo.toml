@@ -1,5 +1,5 @@
 [package]
-name = "vxe-example"
+name = "vxe_renderer"
 version = "0.1.0"
 authors = ["TheJebForge <jeb@thejebforge.com>"]
 edition = "2018"
@@ -7,4 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-vxe-renderer = {path = "../vxe-renderer" }
+glfw = "*"
+luminance = "*"
+luminance-gl = "*"
+luminance-glfw = "*"
+luminance-windowing = "*"
+luminance-derive = "*"

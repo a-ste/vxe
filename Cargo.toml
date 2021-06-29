@@ -1,2 +1,2 @@
 [workspace]
-members = ["vxe-renderer", "vxe-example"]
+members = ["vxe_renderer", "vxe_example", "vxe_engine"]
