@@ -1,5 +1,5 @@
 [package]
-name = "vxe_example"
+name = "vxe_renderer_example"
 version = "0.1.0"
 authors = ["TheJebForge <jeb@thejebforge.com>"]
 edition = "2018"

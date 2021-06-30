@@ -1,3 +1,5 @@
 fn main() {
-    println!("hui");
+    for i in (0..10).rev() {
+        println!("{}", i);
+    }
 }
