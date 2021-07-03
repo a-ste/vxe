@@ -1,8 +1,9 @@
 use luminance::shading_gate::ShadingGate;
 use luminance_gl::GL33;
 use luminance::pipeline::{Pipeline, PipelineError};
-use crate::context::{LumProgram, RenderContext};
+use crate::context::{RenderContext};
 use luminance::shader::UniformInterface;
+use crate::data::LumProgram;
 
 /// Pipeline context for binding shaders
 #[allow(dead_code)]

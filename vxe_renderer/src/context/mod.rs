@@ -1,12 +1,10 @@
 use luminance::context::GraphicsContext;
-use luminance::shader::{Program, UniformInterface};
-use luminance::tess::{Interleaved, Mode, Tess};
-use luminance::framebuffer::Framebuffer;
+use luminance::shader::{UniformInterface};
+use luminance::tess::Mode;
 use luminance_gl::GL33;
-use luminance::texture::Dim2;
 use luminance_glfw::GL33Context;
 use luminance::pipeline::{PipelineError, Render};
-use crate::data::{Vertex, VertexSemantics};
+use crate::data::{Vertex, VertexSemantics, LumProgram, LumTess, LumFrameBuffer};
 
 pub use pipeline::PipelineContext;
 pub use render::RenderContext;
@@ -17,15 +15,6 @@ pub use luminance::render_state::RenderState;
 mod render;
 mod pipeline;
 mod tess;
-
-/// Backend type for Shader program
-pub type LumProgram<I> = Program<GL33, VertexSemantics, (), I>;
-
-/// Backend type for Tesselation, a set of vertices or pretty much all the mesh data that will be sent to GPU
-pub type LumTess = Tess<GL33, Vertex, u32, (), Interleaved>;
-
-/// Backend type for Frame Buffers
-pub type LumFrameBuffer = Framebuffer<GL33, Dim2, (), ()>;
 
 /// Context for creating things and rendering
 #[allow(dead_code)]

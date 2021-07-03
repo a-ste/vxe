@@ -1,8 +1,8 @@
 use luminance_gl::GL33;
 use luminance::tess_gate::TessGate;
-use crate::context::LumTess;
 use luminance::tess::TessView;
 use luminance::pipeline::PipelineError;
+use crate::data::LumTess;
 
 /// Tesselation context for drawing triangles
 #[allow(dead_code)]
