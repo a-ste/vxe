@@ -11,20 +11,35 @@ pub use luminance::face_culling::FaceCulling;
 pub use luminance::face_culling::FaceCullingMode;
 pub use luminance::face_culling::FaceCullingOrder;
 pub use luminance::shader::UniformInterface;
+pub use luminance::texture::Sampler;
 pub use luminance_gl::GL33;
 use luminance::shader::{Program};
 use luminance::tess::{Tess, Interleaved};
 use luminance::framebuffer::Framebuffer;
 use luminance::texture::Dim2;
+use luminance::pixel::{NormRGB8UI, NormRGBA8UI, NormR8UI, NormUnsigned};
+use luminance::pipeline::TextureBinding;
 
 /// Backend type for Shader program
 pub type LumProgram<I> = Program<GL33, VertexSemantics, (), I>;
 
 /// Backend type for Tesselation, a set of vertices or pretty much all the mesh data that will be sent to GPU
-pub type LumTess = Tess<GL33, Vertex, u32, (), Interleaved>;
+pub type LumTess<V, I> = Tess<GL33, V, I, (), Interleaved>;
 
 /// Backend type for Frame Buffers
-pub type LumFrameBuffer = Framebuffer<GL33, Dim2, (), ()>;
+pub type LumFrameBuffer<C, D> = Framebuffer<GL33, Dim2, C, D>;
+
+/// Backend type for RGB Color slot
+pub type LumRGB = NormRGB8UI;
+
+/// Backend type for RGBA slot
+pub type LumRGBA = NormRGBA8UI;
+
+/// Backend type for Gray slot
+pub type LumGray = NormR8UI;
+
+/// Backend type for a color, required for defining samplers in shader interfaces
+pub type LumTextureBinding = TextureBinding<Dim2, NormUnsigned>;
 
 /// Contains required re-exports for shd_interface macro to work
 pub mod shader {

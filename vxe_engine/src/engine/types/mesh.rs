@@ -5,7 +5,7 @@ use crate::shader::Material;
 pub struct Mesh {
     vertices: Vec<Vertex>,
     indices: Vec<u32>,
-    materials: Vec<Box<dyn Material>>,
+    materials: Option<Box<dyn Material>>,
 }
 
 impl Mesh
@@ -18,7 +18,7 @@ impl Mesh
         Mesh {
             vertices: vertices.into(),
             indices: indices.into(),
-            materials: vec![],
+            materials: None,
         }
     }
 

@@ -1,8 +1,9 @@
 use luminance_gl::GL33;
 use luminance::tess_gate::TessGate;
-use luminance::tess::TessView;
+use luminance::tess::{TessView, TessIndex};
 use luminance::pipeline::PipelineError;
 use crate::data::LumTess;
+use luminance::vertex::Vertex;
 
 /// Tesselation context for drawing triangles
 #[allow(dead_code)]
@@ -19,7 +20,11 @@ impl TessContext<'_> {
     }
 
     /// Draws tesselation
-    pub fn draw(&mut self, tess: &LumTess) -> Result<(), PipelineError> {
+    pub fn draw<V, I>(&mut self, tess: &LumTess<V, I>) -> Result<(), PipelineError>
+        where
+            V: Vertex,
+            I: TessIndex,
+    {
         self.tess_gate.render(TessView::whole(tess))
     }
 }
