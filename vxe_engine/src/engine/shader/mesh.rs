@@ -1,6 +1,8 @@
 use vxe_renderer::data::shader::Uniform;
 use vxe_renderer::data::{UniformInterface, GL33, LumProgram};
 use vxe_renderer::context::Context;
+use std::collections::HashMap;
+use crate::types::UniformParameter;
 
 pub trait MeshShader<I>
     where
@@ -13,6 +15,5 @@ pub trait MeshShader<I>
     fn vertex_source() -> String;
     fn fragment_source() -> String;
 
-    fn projection_uni(&self) -> Option<&Uniform<[[f32; 4]; 4]>>;
-    fn view_uni(&self) -> Option<&Uniform<[[f32; 4]; 4]>>;
+    fn parameters(&self) -> HashMap<String, UniformParameter>;
 }

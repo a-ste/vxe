@@ -62,7 +62,7 @@ void main() {
     vec4 col1 = vec4(texture(first, uv).rgb, 1.);
     vec4 col2 = vec4(texture(second, uv).rgb, 1.);
 
-    frag_color = col1 / 2.0 + col2 / 2.0;
+    frag_color = clamp(col1 / col2, 0.0, 1.0) - col1;
 }
 "#;
 
@@ -141,12 +141,12 @@ impl Handler for ExampleHandler {
         ctx.pipeline(back_buffer, PipelineState::default(), |pc, mut sc| {
             let (first, second) = frm.color_slot();
 
-            let fbind = pc.bind_texture(first);
-            let sbind = pc.bind_texture(second);
+            let f_bind = pc.bind_texture(first);
+            let s_bind = pc.bind_texture(second);
 
             sc.use_shader(&mut final_shd, |mut rc, uni| {
-                rc.set_uniform(&uni.first, fbind.binding());
-                rc.set_uniform(&uni.second, sbind.binding());
+                rc.set_uniform(&uni.first, f_bind.binding());
+                rc.set_uniform(&uni.second, s_bind.binding());
 
                 rc.render(RenderState::default(), |mut tc| {
                     tc.draw(&quad)

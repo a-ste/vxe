@@ -1,6 +1,8 @@
 use vxe_engine::shader::{MeshShader};
 use vxe_engine::shader::shd_interface;
 use vxe_engine::shader::shd_interface_uses::*;
+use std::collections::HashMap;
+use vxe_engine::types::UniformParameter;
 
 shd_interface!(
     MyMeshShader,
@@ -42,12 +44,13 @@ impl MeshShader<MyMeshShader> for MyMeshShader {
         "#.to_string()
     }
 
-    fn projection_uni(&self) -> Option<&Uniform<[[f32; 4]; 4]>> {
-        Some(&self.projection)
-    }
+    fn parameters(&self) -> HashMap<String, UniformParameter> {
+        let mut map = HashMap::new();
 
-    fn view_uni(&self) -> Option<&Uniform<[[f32; 4]; 4]>> {
-        Some(&self.view)
+        map.insert("projection".to_string(), UniformParameter::Matrix4(&self.projection));
+        map.insert("view".to_string(), UniformParameter::Matrix4(&self.view));
+
+        map
     }
 }
 
