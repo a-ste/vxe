@@ -5,15 +5,27 @@ macro_rules! vertex {
         {
             Vertex::new(
                 VertexPosition::new([$x, $y, $z]),
-                VertexRGB::new([255, 255, 255]),
+                VertexNormal::new([0.0, 0.0, 0.0]),
+                VertexRGB::new([1.0, 1.0, 1.0]),
             )
         }
     };
 
-    ($x:expr, $y:expr, $z:expr, $r:expr, $g:expr, $b:expr) => {
+    ($x:expr, $y:expr, $z:expr, $nx:expr, $ny:expr, $nz:expr) => {
         {
             Vertex::new(
                 VertexPosition::new([$x, $y, $z]),
+                VertexNormal::new([$nx, $ny, $nz]),
+                VertexRGB::new([1.0, 1.0, 1.0]),
+            )
+        }
+    };
+
+    ($x:expr, $y:expr, $z:expr, $nx:expr, $ny:expr, $nz:expr, $r:expr, $g:expr, $b:expr) => {
+        {
+            Vertex::new(
+                VertexPosition::new([$x, $y, $z]),
+                VertexNormal::new([$nx, $ny, $nz]),
                 VertexRGB::new([$r, $g, $b]),
             )
         }
@@ -25,7 +37,7 @@ macro_rules! vertex {
 macro_rules! shd_interface {
     ($sn:ident, $($n:ident, $t:ty),*) => {
         #[derive(Debug, UniformInterface)]
-        struct $sn {
+        pub struct $sn {
             $(
                 #[uniform(unbound)]
                 $n: Uniform<$t>,

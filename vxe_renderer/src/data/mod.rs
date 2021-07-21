@@ -53,6 +53,8 @@ pub mod shader {
 pub enum VertexSemantics {
     #[sem(name = "position", repr = "[f32; 3]", wrapper = "VertexPosition")]
     Position,
+    #[sem(name = "normal", repr = "[f32; 3]", wrapper = "VertexNormal")]
+    Normal,
     #[sem(name = "color", repr = "[f32; 3]", wrapper = "VertexRGB")]
     Color,
 }
@@ -62,6 +64,9 @@ pub enum VertexSemantics {
 pub struct Vertex {
     #[allow(dead_code)]
     position: VertexPosition,
+
+    #[allow(dead_code)]
+    normal: VertexNormal,
 
     #[allow(dead_code)]
     color: VertexRGB,

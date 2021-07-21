@@ -4,7 +4,7 @@ use luminance::tess::Mode;
 use luminance_gl::GL33;
 use luminance_glfw::GL33Context;
 use luminance::pipeline::{PipelineError, Render};
-use crate::data::{Vertex, VertexSemantics, LumProgram, LumTess, LumFrameBuffer, VertexPosition, VertexRGB};
+use crate::data::{Vertex, VertexSemantics, LumProgram, LumTess, LumFrameBuffer, VertexPosition, VertexNormal, VertexRGB};
 use crate::vertex;
 
 pub use pipeline::PipelineContext;

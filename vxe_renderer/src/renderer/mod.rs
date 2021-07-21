@@ -66,6 +66,9 @@ impl Renderer {
                 }
             }
 
+            // call update
+            handler.update(&mut VXEContext::new(&mut ctxt, self.fps, self.delta));
+
             // fps counter
             if last == start_t.elapsed().as_secs() {
                 frm += 1;
@@ -75,6 +78,7 @@ impl Renderer {
             }
             last = start_t.elapsed().as_secs();
 
+            // drawing frame
             handler.draw(&mut VXEContext::new(&mut ctxt, self.fps, self.delta));
 
             // render time measurements

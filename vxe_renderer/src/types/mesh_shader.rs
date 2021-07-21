@@ -1,8 +1,7 @@
-use vxe_renderer::data::shader::Uniform;
-use vxe_renderer::data::{UniformInterface, GL33, LumProgram};
-use vxe_renderer::context::Context;
+use crate::data::{UniformInterface, GL33, LumProgram};
+use crate::context::Context;
 use std::collections::HashMap;
-use crate::types::UniformParameter;
+use crate::types::parameter::UniformParameter;
 
 pub trait MeshShader<I>
     where

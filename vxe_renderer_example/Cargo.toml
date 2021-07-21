@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 vxe_renderer = {path = "../vxe_renderer" }
+obj-rs = "0.6.3"
+cgmath = "0.18.0"

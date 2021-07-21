@@ -16,7 +16,8 @@ pub mod context;
 /// Contains handler that is used for having control over all events that can happen with a window
 pub mod handler;
 
-
+/// Contains types for handling various aspects of keeping data and using it for rendering (Meshes, Materials, Shaders)
+pub mod types;
 
 pub use renderer::Renderer;
 pub use renderer::builder::RendererBuilder;
