@@ -95,7 +95,10 @@ impl Handler for ExampleHandler {
         // Drawing the mesh onto the frame
         mesh.draw(ctx, frame, mesh_trs, persp, view);
 
+
         // Rendering whatever is in the frame to back buffer
+
+        // Creating quad to draw with
         let quad = ctx.new_quad();
 
         // Creating pipeline
