@@ -18,7 +18,7 @@ impl RenderUtils {
     /// Renders a quad using provided shader and binds provided RGB color slots
     pub fn render_quad_pass_rgb<C1, D1, S>(
         ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
-        shader: &mut LumProgram<S>, color_slots_to_bind: HashMap<String, &mut Texture<GL33, Dim2, LumRGB>>
+        shader: &mut LumProgram<S>, color_slots: HashMap<String, &mut Texture<GL33, Dim2, LumRGB>>
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
@@ -32,7 +32,7 @@ impl RenderUtils {
             // Binding frame's color slots
             let mut bound_textures = HashMap::new();
 
-            for (name, texture) in color_slots_to_bind {
+            for (name, texture) in color_slots {
                 bound_textures.insert(name, pc.bind_texture(texture));
             }
 
@@ -60,7 +60,7 @@ impl RenderUtils {
     /// Renders a quad using provided shader and binds provided RGBA color slots
     pub fn render_quad_pass_rgba<C1, D1, S>(
         ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
-        shader: &mut LumProgram<S>, color_slots_to_bind: HashMap<String, &mut Texture<GL33, Dim2, LumRGBA>>
+        shader: &mut LumProgram<S>, color_slots: HashMap<String, &mut Texture<GL33, Dim2, LumRGBA>>
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
@@ -74,7 +74,7 @@ impl RenderUtils {
             // Binding frame's color slots
             let mut bound_textures = HashMap::new();
 
-            for (name, texture) in color_slots_to_bind {
+            for (name, texture) in color_slots {
                 bound_textures.insert(name, pc.bind_texture(texture));
             }
 
@@ -102,7 +102,7 @@ impl RenderUtils {
     /// Renders a quad using provided shader and binds provided Gray color slots
     pub fn render_quad_pass_gray<C1, D1, S>(
         ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
-        shader: &mut LumProgram<S>, color_slots_to_bind: HashMap<String, &mut Texture<GL33, Dim2, LumGray>>
+        shader: &mut LumProgram<S>, color_slots: HashMap<String, &mut Texture<GL33, Dim2, LumGray>>
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
@@ -116,7 +116,7 @@ impl RenderUtils {
             // Binding frame's color slots
             let mut bound_textures = HashMap::new();
 
-            for (name, texture) in color_slots_to_bind {
+            for (name, texture) in color_slots {
                 bound_textures.insert(name, pc.bind_texture(texture));
             }
 
@@ -144,7 +144,7 @@ impl RenderUtils {
     /// Renders a quad using provided shader, binds provided RGB color slots and depth slot
     pub fn render_quad_pass_rgb_depth<C1, D1, S>(
         ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
-        shader: &mut LumProgram<S>, color_slots_to_bind: HashMap<String, &mut Texture<GL33, Dim2, LumRGB>>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
+        shader: &mut LumProgram<S>, color_slots: HashMap<String, &mut Texture<GL33, Dim2, LumRGB>>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
@@ -158,7 +158,7 @@ impl RenderUtils {
             // Binding frame's color slots
             let mut bound_textures = HashMap::new();
 
-            for (name, texture) in color_slots_to_bind {
+            for (name, texture) in color_slots {
                 bound_textures.insert(name, pc.bind_texture(texture));
             }
 
@@ -200,7 +200,7 @@ impl RenderUtils {
     /// Renders a quad using provided shader, binds provided RGBA color slots and depth slot
     pub fn render_quad_pass_rgba_depth<C1, D1, S>(
         ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
-        shader: &mut LumProgram<S>, color_slots_to_bind: HashMap<String, &mut Texture<GL33, Dim2, LumRGBA>>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
+        shader: &mut LumProgram<S>, color_slots: HashMap<String, &mut Texture<GL33, Dim2, LumRGBA>>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
@@ -214,7 +214,7 @@ impl RenderUtils {
             // Binding frame's color slots
             let mut bound_textures = HashMap::new();
 
-            for (name, texture) in color_slots_to_bind {
+            for (name, texture) in color_slots {
                 bound_textures.insert(name, pc.bind_texture(texture));
             }
 
@@ -256,7 +256,7 @@ impl RenderUtils {
     /// Renders a quad using provided shader, binds provided Gray color slots and depth slot
     pub fn render_quad_pass_gray_depth<C1, D1, S>(
         ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
-        shader: &mut LumProgram<S>, color_slots_to_bind: HashMap<String, &mut Texture<GL33, Dim2, LumGray>>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
+        shader: &mut LumProgram<S>, color_slots: HashMap<String, &mut Texture<GL33, Dim2, LumGray>>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
@@ -270,7 +270,7 @@ impl RenderUtils {
             // Binding frame's color slots
             let mut bound_textures = HashMap::new();
 
-            for (name, texture) in color_slots_to_bind {
+            for (name, texture) in color_slots {
                 bound_textures.insert(name, pc.bind_texture(texture));
             }
 
