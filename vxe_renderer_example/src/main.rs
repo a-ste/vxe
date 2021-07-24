@@ -60,7 +60,7 @@ impl Handler for ExampleHandler {
         self.final_pass = Some(FinalPass::new(ctx));
 
         // Offsetting camera location
-        self.camera.transform.position -= Vector3::new(0.7, 0.0, 0.0);
+        self.camera.transform.position -= Vector3::new(2.7, 0.0, 0.0);
     }
 
     fn draw(&mut self, ctx: &mut Context) {
@@ -95,11 +95,16 @@ impl Handler for ExampleHandler {
         mesh.draw(ctx, frame, mesh_trs, persp, view);
 
         // Rendering whatever is in the frame to back buffer
-        RenderUtils::render_quad_pass_depth(
+        let color_slot = frame.color_slot();
+        let mut map = HashMap::new();
+
+        map.insert("frame".to_string(), color_slot);
+
+        RenderUtils::render_quad_pass_rgb(
             ctx,
             &back,
             pass,
-            ("frame".to_string(), frame.depth_slot())
+            map
         )
     }
 }
@@ -110,7 +115,7 @@ fn main() {
         .title("3D example")
         .resolution([1366, 768])
         .vsync(false)
-        .fps_limit(69.0)
+        .fps_limit(0.0)
         .build();
 
     // Initializing event handler
