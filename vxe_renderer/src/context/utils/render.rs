@@ -308,5 +308,45 @@ impl RenderUtils {
             })
         });
     }
+
+    /// Renders a quad using provided shader, binds provided depth slot
+    pub fn render_quad_pass_depth<C1, D1, S>(
+        ctx: &mut Context, target_frame: &LumFrameBuffer<C1, D1>,
+        shader: &mut LumProgram<S>, depth_slot: (String, &mut Texture<GL33, Dim2, LumDepth>)
+    ) where
+        C1: ColorSlot<GL33, Dim2>,
+        D1: DepthSlot<GL33, Dim2>,
+        S: UniformInterface<GL33> + MeshShader<S>
+    {
+        // Creating quad to draw with
+        let quad = ctx.new_quad();
+
+        // Creating pipeline
+        ctx.pipeline(target_frame, PipelineState::default(), |pc, mut sc| {
+            let (depth_name, depth_texture) = depth_slot;
+            let depth_bound = pc.bind_texture(depth_texture);
+
+            // Using the final pass shader
+            sc.use_shader(shader, |mut rc, uni| {
+                let params = uni.parameters();
+
+                // Passing depth texture
+                {
+                    let (name, bound) = (depth_name, depth_bound);
+
+                    if let Some(uniform_param) = params.get(&name) {
+                        if let UniformParameter::DepthTexture(uniform_ref) = uniform_param {
+                            rc.set_uniform(uniform_ref, bound.binding());
+                        }
+                    }
+                }
+
+                // Rendering quad
+                rc.render(RenderState::default(), |mut tc| {
+                    tc.draw(&quad)
+                })
+            })
+        });
+    }
 }
 

@@ -95,11 +95,10 @@ impl Handler for ExampleHandler {
         mesh.draw(ctx, frame, mesh_trs, persp, view);
 
         // Rendering whatever is in the frame to back buffer
-        RenderUtils::render_quad_pass_rgb_depth(
+        RenderUtils::render_quad_pass_depth(
             ctx,
             &back,
             pass,
-            HashMap::new(),
             ("frame".to_string(), frame.depth_slot())
         )
     }
