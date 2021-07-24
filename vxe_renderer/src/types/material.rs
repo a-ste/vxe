@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use crate::types::parameter::Parameter;
-use crate::context::{Context, PipelineState};
-use crate::data::{Vertex, LumTess};
+use crate::context::{Context, PipelineState, RenderState};
+use crate::data::{Vertex, LumTess, DepthWrite};
 use crate::types::DeferredFrameBuffer;
 use std::sync::RwLock;
 use std::rc::Rc;
@@ -24,4 +24,10 @@ pub fn default_pipeline() -> PipelineState {
     PipelineState::default()
         .enable_clear_color(false)
         .enable_clear_depth(false)
+}
+
+/// Defines default pipeline to be used by deferred rendering
+pub fn default_render_state() -> RenderState {
+    RenderState::default()
+        .set_depth_write(DepthWrite::On)
 }

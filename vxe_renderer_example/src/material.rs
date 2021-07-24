@@ -1,4 +1,4 @@
-use vxe_renderer::types::{Material, DeferredFrameBuffer, Parameter, MeshShader, default_pipeline, UniformParameter};
+use vxe_renderer::types::{Material, DeferredFrameBuffer, Parameter, MeshShader, default_pipeline, UniformParameter, default_render_state};
 use vxe_renderer::context::{Context, PipelineState, RenderState};
 use std::rc::Rc;
 use std::sync::RwLock;
@@ -42,7 +42,7 @@ impl Material for TestMaterial {
                     }
                 }
 
-                rc.render(RenderState::default(), |mut tc| {
+                rc.render(default_render_state(), |mut tc| {
                     tc.draw(tess)
                 })
             })

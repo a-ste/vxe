@@ -3,11 +3,11 @@ use vxe_renderer::data::shader::*;
 
 use vxe_renderer::types::{MeshShader, UniformParameter};
 use std::collections::HashMap;
-use vxe_renderer::data::LumTextureBinding;
+use vxe_renderer::data::{LumTextureBinding, LumDepthBinding};
 
 shd_interface!(
     FinalPass,
-    frame, LumTextureBinding
+    frame, LumDepthBinding
 );
 
 impl MeshShader<FinalPass> for FinalPass {
@@ -38,7 +38,9 @@ impl MeshShader<FinalPass> for FinalPass {
         out vec4 frag_color;
 
         void main() {
-            frag_color = texture2D(frame, v_position);
+            float depth = pow(texture2D(frame, v_position).x, 20.0);
+
+            frag_color = vec4(depth, depth, depth, 1.);
         }
         "#.to_string()
     }
@@ -46,7 +48,7 @@ impl MeshShader<FinalPass> for FinalPass {
     fn parameters(&self) -> HashMap<String, UniformParameter> {
         let mut map = HashMap::new();
 
-        map.insert("frame".to_string(),  UniformParameter::Texture(&self.frame));
+        map.insert("frame".to_string(),  UniformParameter::DepthTexture(&self.frame));
 
         map
     }

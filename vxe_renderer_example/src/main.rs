@@ -90,11 +90,10 @@ impl Handler for ExampleHandler {
         let mut mesh_trs = Transform::default();
 
         let rot = self.start_t.elapsed().as_secs_f32() * 40.0;
-        mesh_trs.rotation = Euler::new(Deg(0.0), Deg(0.0), Deg(0.0)).into();
+        mesh_trs.rotation = Euler::new(Deg(0.0 + rot), Deg(-90.0 + rot), Deg(0.0 + rot)).into();
 
         // Drawing the mesh onto the frame
         mesh.draw(ctx, frame, mesh_trs, persp, view);
-
 
         // Rendering whatever is in the frame to back buffer
 
@@ -104,7 +103,7 @@ impl Handler for ExampleHandler {
         // Creating pipeline
         ctx.pipeline(&back, PipelineState::default(), |pc, mut sc| {
             // Binding frame's color slot
-            let frame_tex = frame.color_slot();
+            let frame_tex = frame.depth_slot();
             let bound_tex = pc.bind_texture(frame_tex);
 
             // Using the final pass shader
@@ -113,7 +112,7 @@ impl Handler for ExampleHandler {
 
                 // Passing frame texture to final pass shader
                 if let Some(frame_enum) = params.get("frame") {
-                    if let UniformParameter::Texture(frame_uniform) = frame_enum {
+                    if let UniformParameter::DepthTexture(frame_uniform) = frame_enum {
                         rc.set_uniform(frame_uniform, bound_tex.binding());
                     }
                 }

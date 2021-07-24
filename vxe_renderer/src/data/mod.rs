@@ -17,7 +17,7 @@ use luminance::shader::{Program};
 use luminance::tess::{Tess, Interleaved};
 use luminance::framebuffer::Framebuffer;
 use luminance::texture::Dim2;
-use luminance::pixel::{NormRGB8UI, NormRGBA8UI, NormR8UI, NormUnsigned};
+use luminance::pixel::{NormRGB8UI, NormRGBA8UI, NormR8UI, NormUnsigned, Depth32F, Floating};
 use luminance::pipeline::TextureBinding;
 
 /// Backend type for Shader program
@@ -38,8 +38,14 @@ pub type LumRGBA = NormRGBA8UI;
 /// Backend type for Gray slot
 pub type LumGray = NormR8UI;
 
+/// Backend type for Depth slot
+pub type LumDepth = Depth32F;
+
 /// Backend type for a color, required for defining samplers in shader interfaces
 pub type LumTextureBinding = TextureBinding<Dim2, NormUnsigned>;
+
+/// Backend type for a color, required for defining samplers in shader interfaces
+pub type LumDepthBinding = TextureBinding<Dim2, Floating>;
 
 /// Contains required re-exports for shd_interface macro to work
 pub mod shader {

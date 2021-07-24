@@ -1,5 +1,5 @@
 use crate::data::shader::Uniform;
-use crate::data::LumTextureBinding;
+use crate::data::{LumTextureBinding, LumDepthBinding};
 
 pub enum Parameter {
     Float(f32),
@@ -10,4 +10,5 @@ pub enum UniformParameter<'a> {
     Float(&'a Uniform<f32>),
     Matrix4(&'a Uniform<[[f32; 4]; 4]>),
     Texture(&'a Uniform<LumTextureBinding>),
+    DepthTexture(&'a Uniform<LumDepthBinding>),
 }
