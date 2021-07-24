@@ -24,6 +24,9 @@ mod pipeline;
 mod tess;
 mod shader;
 
+/// Module containing various utils for rendering
+pub mod utils;
+
 /// Context for creating things and rendering
 #[allow(dead_code)]
 pub struct Context<'a> {

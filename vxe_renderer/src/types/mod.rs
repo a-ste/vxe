@@ -16,7 +16,7 @@ pub use camera::Camera;
 use crate::data::{LumFrameBuffer, LumRGB, LumDepth};
 
 /// Framebuffer that will be used by deferred rendering
-pub type DeferredFrameBuffer = LumFrameBuffer<(LumRGB), LumDepth>;
+pub type DeferredFrameBuffer = LumFrameBuffer<LumRGB, LumDepth>;
 
 pub use material::default_pipeline;
 pub use material::default_render_state;

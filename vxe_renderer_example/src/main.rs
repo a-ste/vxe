@@ -1,25 +1,24 @@
+use std::time::Instant;
+
+use cgmath::{Deg, Euler, Vector3};
+use obj::{load_obj, Obj};
+use obj::Vertex as OBJVertex;
+
+use vxe_renderer::context::{Context};
+use vxe_renderer::context::utils::{FrameUtils, RenderUtils};
+use vxe_renderer::data::{LumProgram, Sampler, Vertex};
+use vxe_renderer::data::{VertexNormal, VertexPosition, VertexRGB};
+use vxe_renderer::handler::Handler;
+use vxe_renderer::RendererBuilder;
+use vxe_renderer::types::{Camera, DeferredFrameBuffer, Material, Mesh, MeshShader, Transform};
+
+use crate::material::TestMaterial;
+use crate::pass::FinalPass;
+use std::collections::HashMap;
+
 mod material;
 mod shader;
 mod pass;
-
-use vxe_renderer::handler::Handler;
-use vxe_renderer::context::{Context, PipelineState, RenderState};
-use vxe_renderer::data::{Vertex, Sampler, LumTess, LumProgram};
-use vxe_renderer::RendererBuilder;
-use vxe_renderer::types::{Mesh, DeferredFrameBuffer, Material, Parameter, Transform, Camera, MeshShader, UniformParameter};
-
-use obj::{load_obj, Obj};
-use obj::Vertex as OBJVertex;
-use vxe_renderer::data::{VertexPosition, VertexNormal, VertexRGB};
-use std::rc::Rc;
-use std::sync::RwLock;
-use std::collections::HashMap;
-use crate::material::TestMaterial;
-use cgmath::{Vector3, Quaternion, Rotation, Euler, Deg};
-use std::borrow::Borrow;
-use std::f32::consts::PI;
-use crate::pass::FinalPass;
-use std::time::Instant;
 
 pub struct ExampleHandler {
     start_t: Instant,
@@ -81,7 +80,7 @@ impl Handler for ExampleHandler {
         self.last = self.start_t.elapsed().as_secs_f32();
 
         // Clearing frame
-        ctx.pipeline(frame, PipelineState::default(), |pc, sc| Ok(()));
+        FrameUtils::clear_black(ctx, frame);
 
         // Getting matrices from camera
         let (persp, view) = self.camera.matrices(ctx);
@@ -96,33 +95,13 @@ impl Handler for ExampleHandler {
         mesh.draw(ctx, frame, mesh_trs, persp, view);
 
         // Rendering whatever is in the frame to back buffer
-
-        // Creating quad to draw with
-        let quad = ctx.new_quad();
-
-        // Creating pipeline
-        ctx.pipeline(&back, PipelineState::default(), |pc, mut sc| {
-            // Binding frame's color slot
-            let frame_tex = frame.depth_slot();
-            let bound_tex = pc.bind_texture(frame_tex);
-
-            // Using the final pass shader
-            sc.use_shader(pass, |mut rc, uni| {
-                let params = uni.parameters();
-
-                // Passing frame texture to final pass shader
-                if let Some(frame_enum) = params.get("frame") {
-                    if let UniformParameter::DepthTexture(frame_uniform) = frame_enum {
-                        rc.set_uniform(frame_uniform, bound_tex.binding());
-                    }
-                }
-
-                // Rendering quad
-                rc.render(RenderState::default(), |mut tc| {
-                    tc.draw(&quad)
-                })
-            })
-        });
+        RenderUtils::render_quad_pass_rgb_depth(
+            ctx,
+            &back,
+            pass,
+            HashMap::new(),
+            ("frame".to_string(), frame.depth_slot())
+        )
     }
 }
 

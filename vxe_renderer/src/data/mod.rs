@@ -26,7 +26,7 @@ pub type LumProgram<I> = Program<GL33, VertexSemantics, (), I>;
 /// Backend type for Tesselation, a set of vertices or pretty much all the mesh data that will be sent to GPU
 pub type LumTess<V, I> = Tess<GL33, V, I, (), Interleaved>;
 
-/// Backend type for Frame Buffers
+/// Backend type for Frame Buffers. C generic must be a tuple of LumRGB, LumRGBA, LumGray; D either empty tuple or LumDepth
 pub type LumFrameBuffer<C, D> = Framebuffer<GL33, Dim2, C, D>;
 
 /// Backend type for RGB Color slot

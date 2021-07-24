@@ -1,5 +1,5 @@
 use vxe_renderer::types::{Material, DeferredFrameBuffer, Parameter, MeshShader, default_pipeline, UniformParameter, default_render_state};
-use vxe_renderer::context::{Context, PipelineState, RenderState};
+use vxe_renderer::context::{Context};
 use std::rc::Rc;
 use std::sync::RwLock;
 use vxe_renderer::data::{LumTess, Vertex, LumProgram};
@@ -20,7 +20,7 @@ impl Material for TestMaterial {
     }
 
     fn render(&mut self, ctx: &mut Context, frame: &DeferredFrameBuffer, tess: &LumTess<Vertex, u32>, trs: [[f32; 4]; 4], projection: [[f32; 4]; 4], view: [[f32; 4]; 4]) {
-        ctx.pipeline(frame, default_pipeline(), |pc, mut sc| {
+        ctx.pipeline(frame, default_pipeline(), |_, mut sc| {
             sc.use_shader(&mut self.shr, |mut rc, uni| {
                 let params = uni.parameters();
 
@@ -53,7 +53,7 @@ impl Material for TestMaterial {
         "Test Material".to_string()
     }
 
-    fn set_parameter(&mut self, name: String, parameter: Parameter) {
+    fn set_parameter(&mut self, _name: String, _parameter: Parameter) {
         todo!()
     }
 

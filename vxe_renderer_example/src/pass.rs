@@ -3,7 +3,7 @@ use vxe_renderer::data::shader::*;
 
 use vxe_renderer::types::{MeshShader, UniformParameter};
 use std::collections::HashMap;
-use vxe_renderer::data::{LumTextureBinding, LumDepthBinding};
+use vxe_renderer::data::{LumDepthBinding};
 
 shd_interface!(
     FinalPass,

@@ -1,4 +1,4 @@
-use crate::data::{Vertex, LumTess, LumFrameBuffer};
+use crate::data::{Vertex, LumTess};
 use crate::context::Context;
 use crate::types::material::Material;
 use crate::types::{Transform, DeferredFrameBuffer};
