@@ -17,7 +17,7 @@ use luminance::shader::{Program};
 use luminance::tess::{Tess, Interleaved};
 use luminance::framebuffer::Framebuffer;
 use luminance::texture::Dim2;
-use luminance::pixel::{NormRGB8UI, NormRGBA8UI, NormR8UI, NormUnsigned, Depth32F, Floating};
+use luminance::pixel::{RGB32F, RGBA32F, R32F, Depth32F, Floating};
 use luminance::pipeline::TextureBinding;
 
 /// Backend type for Shader program
@@ -30,19 +30,19 @@ pub type LumTess<V, I> = Tess<GL33, V, I, (), Interleaved>;
 pub type LumFrameBuffer<C, D> = Framebuffer<GL33, Dim2, C, D>;
 
 /// Backend type for RGB Color slot
-pub type LumRGB = NormRGB8UI;
+pub type LumRGB = RGB32F;
 
 /// Backend type for RGBA slot
-pub type LumRGBA = NormRGBA8UI;
+pub type LumRGBA = RGBA32F;
 
 /// Backend type for Gray slot
-pub type LumGray = NormR8UI;
+pub type LumGray = R32F;
 
 /// Backend type for Depth slot
 pub type LumDepth = Depth32F;
 
 /// Backend type for a color, required for defining samplers in shader interfaces
-pub type LumTextureBinding = TextureBinding<Dim2, NormUnsigned>;
+pub type LumTextureBinding = TextureBinding<Dim2, Floating>;
 
 /// Backend type for a color, required for defining samplers in shader interfaces
 pub type LumDepthBinding = TextureBinding<Dim2, Floating>;

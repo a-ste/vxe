@@ -3,7 +3,7 @@ use crate::context::Context;
 use std::collections::HashMap;
 use crate::types::parameter::UniformParameter;
 
-pub trait MeshShader<I>
+pub trait Shader<I>
     where
         I: UniformInterface<GL33>
 {

@@ -1,4 +1,4 @@
-use vxe_renderer::types::{Material, DeferredFrameBuffer, Parameter, MeshShader, default_pipeline, UniformParameter, default_render_state};
+use vxe_renderer::types::{Material, DeferredFrameBuffer, Parameter, Shader, default_pipeline, UniformParameter, default_render_state};
 use vxe_renderer::context::{Context};
 use std::rc::Rc;
 use std::sync::RwLock;

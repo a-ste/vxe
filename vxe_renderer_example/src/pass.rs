@@ -1,7 +1,7 @@
 use vxe_renderer::shd_interface;
 use vxe_renderer::data::shader::*;
 
-use vxe_renderer::types::{MeshShader, UniformParameter};
+use vxe_renderer::types::{Shader, UniformParameter};
 use std::collections::HashMap;
 use vxe_renderer::data::{LumTextureBinding};
 
@@ -10,7 +10,7 @@ shd_interface!(
     frame, LumTextureBinding
 );
 
-impl MeshShader<FinalPass> for FinalPass {
+impl Shader<FinalPass> for FinalPass {
     fn vertex_source() -> String {
         r#"
         in vec3 position;

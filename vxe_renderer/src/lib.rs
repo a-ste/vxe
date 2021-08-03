@@ -1,6 +1,6 @@
 //! Renderer crate for vxe_engine
 //!
-//! Essentially is a simplification of luminance API, a glorious wrapper, so I can have everything work how I want it to work
+//! At core is a simplification of luminance API, but also provides easy way to render meshes using PBR materials and deferred rendering
 //!
 //! This crate shouldn't be used by itself, unless you're interested in working on your own engine with help of this renderer crate
 #[warn(missing_docs)]
@@ -18,6 +18,9 @@ pub mod handler;
 
 /// Contains types for handling various aspects of keeping data and using it for rendering (Meshes, Materials, Shaders)
 pub mod types;
+
+/// Contains utils and types for easy deferred rendering and PBR
+pub mod deferred;
 
 pub use renderer::Renderer;
 pub use renderer::builder::RendererBuilder;

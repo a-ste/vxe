@@ -119,6 +119,7 @@ impl Context<'_> {
         self.delta
     }
 
+    /// Gets resolution of the window
     pub fn resolution(&self) -> [i32; 2] {
         let res = self.ctx.window.get_size();
         [res.0, res.1]

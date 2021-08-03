@@ -2,7 +2,7 @@ use crate::context::Context;
 use luminance::pipeline::PipelineState;
 use luminance::render_state::RenderState;
 use crate::data::{LumFrameBuffer, LumProgram, GL33, LumRGB, LumRGBA, LumGray, LumDepth};
-use crate::types::{UniformParameter, MeshShader};
+use crate::types::{UniformParameter, Shader};
 use luminance::shader::UniformInterface;
 use std::collections::HashMap;
 use luminance::texture::{Dim2, Texture};
@@ -22,7 +22,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();
@@ -64,7 +64,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();
@@ -106,7 +106,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();
@@ -148,7 +148,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();
@@ -204,7 +204,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();
@@ -260,7 +260,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();
@@ -316,7 +316,7 @@ impl RenderUtils {
     ) where
         C1: ColorSlot<GL33, Dim2>,
         D1: DepthSlot<GL33, Dim2>,
-        S: UniformInterface<GL33> + MeshShader<S>
+        S: UniformInterface<GL33> + Shader<S>
     {
         // Creating quad to draw with
         let quad = ctx.new_quad();

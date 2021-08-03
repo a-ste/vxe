@@ -1,7 +1,7 @@
 use vxe_renderer::shd_interface;
 use vxe_renderer::data::shader::*;
 
-use vxe_renderer::types::{MeshShader, UniformParameter};
+use vxe_renderer::types::{Shader, UniformParameter};
 use std::collections::HashMap;
 
 shd_interface!(
@@ -11,7 +11,7 @@ shd_interface!(
     trs, [[f32; 4]; 4]
 );
 
-impl MeshShader<TestShader> for TestShader {
+impl Shader<TestShader> for TestShader {
     fn vertex_source() -> String {
         r#"
         in vec3 position;
