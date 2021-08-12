@@ -3,7 +3,7 @@ mod final_pass;
 
 use crate::context::{Context, RenderState};
 use crate::data::{LumProgram, LumFrameBuffer, LumRGB, LumDepth, Sampler, DepthComparison};
-use crate::deferred::light_pass::shader::LightPassShader;
+use crate::deferred::light_pass::shader::{LightPassShader, LIGHT_CHUNKS};
 use crate::deferred::light_pass::final_pass::FinalLightPassShader;
 use crate::types::{Shader, DeferredFrameBuffer, Light, default_pipeline, UniformParameter};
 use luminance::backend::color_slot::ColorSlot;
@@ -47,7 +47,7 @@ impl LightPass {
         FrameUtils::clear_black(ctx, frm);
 
         // Rendering each light into the frame buffer
-        for light_chunk in lights.chunks(50) {
+        for light_chunk in lights.chunks(LIGHT_CHUNKS as usize) {
             ctx.pipeline(frm, default_pipeline(), |pc, mut sc| {
                 let normal = pc.bind_texture(normal_slot);
                 let position = pc.bind_texture(position_slot);

@@ -93,8 +93,8 @@ impl Handler for ExampleHandler {
         // Getting matrices from camera
         let (persp, view) = self.camera.matrices(ctx);
 
-        for x in -8..=8 {
-            for y in -5..=5 {
+        for x in -5..=5 {
+            for y in -3..=3 {
                 // Mesh transform
                 let mut mesh_trs = Transform::default();
                 mesh_trs.position += Vector3::new(0.0, x as f32, y as f32);
@@ -118,18 +118,19 @@ fn main() {
         .title("3D example")
         .resolution([1366, 768])
         .vsync(false)
-        .fps_limit(0.0)
+        .fps_limit(200.0)
         .build();
 
     let mut lights = vec![];
     let mut rang = rand::thread_rng();
 
-    for i in 0..50 {
+    for i in 0..350 {
         let mut light = Light::new([1.5, rang.gen_range(-7.0..7.0), rang.gen_range(-4.0..4.0)]);
 
-        light.color = [rang.gen_range(0.1..1.0), rang.gen_range(0.1..1.0), rang.gen_range(0.1..1.0)];
+        light.color = [rang.gen_range(0.1..0.4), rang.gen_range(0.1..0.4), rang.gen_range(0.1..0.4)];
         light.linear_attenuation = 0.7;
         light.quadratic_attenuation = 1.6;
+        light.intensity = 0.6;
 
         println!("light #{} radius: {}", i, light.radius());
 

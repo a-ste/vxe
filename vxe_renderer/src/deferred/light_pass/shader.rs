@@ -4,6 +4,8 @@ use crate::data::LumTextureBinding;
 use crate::types::{Shader, UniformParameter};
 use std::collections::HashMap;
 
+pub const LIGHT_CHUNKS: u32 = 250;
+
 shd_interface![
     LightPassShader,
 
@@ -43,12 +45,12 @@ impl Shader<LightPassShader> for LightPassShader {
         uniform sampler2D position_texture;
         uniform sampler2D rms_texture;
 
-        uniform vec3 light_pos[50];
-        uniform vec3 light_color[50];
-        uniform float light_intensity[50];
-        uniform float light_linear[50];
-        uniform float light_quadratic[50];
-        uniform float light_radius[50];
+        uniform vec3 light_pos[LIGHT_CHUNKS];
+        uniform vec3 light_color[LIGHT_CHUNKS];
+        uniform float light_intensity[LIGHT_CHUNKS];
+        uniform float light_linear[LIGHT_CHUNKS];
+        uniform float light_quadratic[LIGHT_CHUNKS];
+        uniform float light_radius[LIGHT_CHUNKS];
         uniform int light_count;
 
         out vec4 frag_color;
@@ -84,7 +86,7 @@ impl Shader<LightPassShader> for LightPassShader {
 
             frag_color = vec4(lighting, 1.0);
         }
-        "#.to_string()
+        "#.to_string().replace("LIGHT_CHUNKS", &LIGHT_CHUNKS.to_string())
     }
 
     fn parameters(&self) -> HashMap<String, UniformParameter> {
@@ -96,13 +98,13 @@ impl Shader<LightPassShader> for LightPassShader {
         map.insert("position_texture".to_string(), UniformParameter::Texture(&self.position_texture));
         map.insert("rms_texture".to_string(), UniformParameter::Texture(&self.rms_texture));
 
-        map.insert("light_pos".to_string(), UniformParameter::Vector3Array(50));
-        map.insert("light_color".to_string(), UniformParameter::Vector3Array(50));
-        map.insert("light_intensity".to_string(), UniformParameter::FloatArray(50));
+        map.insert("light_pos".to_string(), UniformParameter::Vector3Array(LIGHT_CHUNKS));
+        map.insert("light_color".to_string(), UniformParameter::Vector3Array(LIGHT_CHUNKS));
+        map.insert("light_intensity".to_string(), UniformParameter::FloatArray(LIGHT_CHUNKS));
 
-        map.insert("light_linear".to_string(), UniformParameter::FloatArray(50));
-        map.insert("light_quadratic".to_string(), UniformParameter::FloatArray(50));
-        map.insert("light_radius".to_string(), UniformParameter::FloatArray(50));
+        map.insert("light_linear".to_string(), UniformParameter::FloatArray(LIGHT_CHUNKS));
+        map.insert("light_quadratic".to_string(), UniformParameter::FloatArray(LIGHT_CHUNKS));
+        map.insert("light_radius".to_string(), UniformParameter::FloatArray(LIGHT_CHUNKS));
 
 
         map.insert("light_count".to_string(), UniformParameter::Integer(&self.light_count));
