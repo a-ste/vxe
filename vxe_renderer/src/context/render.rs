@@ -31,6 +31,18 @@ impl RenderContext<'_> {
         self.pgr_interface.set(parameter, value);
     }
 
+    /// Sets parameter of the shader by name
+    pub fn set_uniform_by_name<T>(&mut self, parameter: &str, value: T)
+        where
+            T: Uniformable<GL33>
+    {
+        if let Ok(mut builder) = self.pgr_interface.query() {
+            let uniform = builder.ask_or_unbound::<T, &str>(parameter);
+
+            self.pgr_interface.set(&uniform, value);
+        }
+    }
+
     /// Prepares render state and runs the closure
     pub fn render<F>(&mut self, state: RenderState, func: F) -> Result<(), PipelineError>
         where

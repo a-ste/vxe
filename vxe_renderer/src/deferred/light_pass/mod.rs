@@ -47,7 +47,7 @@ impl LightPass {
         FrameUtils::clear_black(ctx, frm);
 
         // Rendering each light into the frame buffer
-        for light in lights {
+        for light_chunk in lights.chunks(50) {
             ctx.pipeline(frm, default_pipeline(), |pc, mut sc| {
                 let normal = pc.bind_texture(normal_slot);
                 let position = pc.bind_texture(position_slot);
@@ -62,12 +62,18 @@ impl LightPass {
                     UniformParameter::texture_uniform(&mut rc, &params, "position_texture", position.binding());
                     UniformParameter::texture_uniform(&mut rc, &params, "rms_texture", rms.binding());
 
-                    UniformParameter::vector3_uniform(&mut rc, &params, "light_pos", <[f32; 3]>::try_from(light.position).unwrap());
-                    UniformParameter::vector3_uniform(&mut rc, &params, "light_color", light.color);
-                    UniformParameter::float_uniform(&mut rc, &params, "light_intensity", light.intensity);
+                    for (i, light) in light_chunk.iter().enumerate() {
+                        UniformParameter::vector3_array_uniform(&mut rc, &params, "light_pos", i as u32, <[f32; 3]>::try_from(light.position).unwrap());
+                        UniformParameter::vector3_array_uniform(&mut rc, &params, "light_color", i as u32, light.color);
+                        UniformParameter::float_array_uniform(&mut rc, &params, "light_intensity", i as u32, light.intensity);
 
-                    UniformParameter::float_uniform(&mut rc, &params, "light_linear", light.linear_attenuation);
-                    UniformParameter::float_uniform(&mut rc, &params, "light_quadratic", light.quadratic_attenuation);
+                        UniformParameter::float_array_uniform(&mut rc, &params, "light_linear", i as u32, light.linear_attenuation);
+                        UniformParameter::float_array_uniform(&mut rc, &params, "light_quadratic", i as u32, light.quadratic_attenuation);
+
+                        UniformParameter::float_array_uniform(&mut rc, &params, "light_radius", i as u32, light.radius());
+                    }
+
+                    UniformParameter::integer_uniform(&mut rc, &params, "light_count", light_chunk.len() as i32);
 
                     rc.render(
                         RenderState::default().set_blending(

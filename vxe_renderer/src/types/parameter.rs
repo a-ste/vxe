@@ -9,14 +9,25 @@ pub enum Parameter {
 }
 
 pub enum UniformParameter<'a> {
+    Integer(&'a Uniform<i32>),
     Float(&'a Uniform<f32>),
+    FloatArray(u32),
     Vector3(&'a Uniform<[f32; 3]>),
+    Vector3Array(u32),
     Matrix4(&'a Uniform<[[f32; 4]; 4]>),
     Texture(&'a Uniform<LumTextureBinding>),
     DepthTexture(&'a Uniform<LumDepthBinding>),
 }
 
 impl UniformParameter<'_> {
+    pub fn integer_uniform(rc: &mut RenderContext, params: &HashMap<String, UniformParameter>, param: &str, value: i32) {
+        if let Some(enm) = params.get(param) {
+            if let UniformParameter::Integer(uniform) = enm {
+                rc.set_uniform(uniform, value);
+            }
+        }
+    }
+
     pub fn float_uniform(rc: &mut RenderContext, params: &HashMap<String, UniformParameter>, param: &str, value: f32) {
         if let Some(enm) = params.get(param) {
             if let UniformParameter::Float(uniform) = enm {
@@ -25,10 +36,30 @@ impl UniformParameter<'_> {
         }
     }
 
+    pub fn float_array_uniform(rc: &mut RenderContext, params: &HashMap<String, UniformParameter>, param: &str, index: u32, value: f32) {
+        if let Some(enm) = params.get(param) {
+            if let UniformParameter::FloatArray(max) = enm {
+                if index < *max {
+                    rc.set_uniform_by_name(&format!("{}[{}]", param, index), value);
+                }
+            }
+        }
+    }
+
     pub fn vector3_uniform(rc: &mut RenderContext, params: &HashMap<String, UniformParameter>, param: &str, value: [f32; 3]) {
         if let Some(enm) = params.get(param) {
             if let UniformParameter::Vector3(uniform) = enm {
                 rc.set_uniform(uniform, value);
+            }
+        }
+    }
+
+    pub fn vector3_array_uniform(rc: &mut RenderContext, params: &HashMap<String, UniformParameter>, param: &str, index: u32, value: [f32; 3]) {
+        if let Some(enm) = params.get(param) {
+            if let UniformParameter::Vector3Array(max) = enm {
+                if index < *max {
+                    rc.set_uniform_by_name(&format!("{}[{}]", param, index), value);
+                }
             }
         }
     }

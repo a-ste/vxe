@@ -1,20 +1,18 @@
 use std::time::Instant;
 
-use cgmath::{Deg, Euler, Vector3, Quaternion, Rad};
+use cgmath::{Deg, Euler, Vector3, Rad};
 use obj::{load_obj, Obj};
 use obj::Vertex as OBJVertex;
 
 use vxe_renderer::context::{Context};
-use vxe_renderer::context::utils::{FrameUtils, RenderUtils};
-use vxe_renderer::data::{LumProgram, Sampler, Vertex};
+use vxe_renderer::context::utils::{FrameUtils};
+use vxe_renderer::data::{Sampler, Vertex};
 use vxe_renderer::data::{VertexNormal, VertexPosition, VertexRGB};
 use vxe_renderer::handler::Handler;
 use vxe_renderer::RendererBuilder;
-use vxe_renderer::types::{Camera, DeferredFrameBuffer, Material, Mesh, Shader, Transform, Light};
+use vxe_renderer::types::{Camera, DeferredFrameBuffer, Material, Mesh, Transform, Light};
 use vxe_renderer::vertex;
 
-use crate::pass::FinalPass;
-use std::collections::HashMap;
 use vxe_renderer::deferred::{PBRMaterial, LightPass};
 use cgmath::num_traits::FloatConst;
 use rand::Rng;
@@ -126,11 +124,14 @@ fn main() {
     let mut lights = vec![];
     let mut rang = rand::thread_rng();
 
-    for _ in 0..10 {
+    for i in 0..50 {
         let mut light = Light::new([1.5, rang.gen_range(-7.0..7.0), rang.gen_range(-4.0..4.0)]);
 
-        light.linear_attenuation = 0.2;
-        light.quadratic_attenuation = 5.0;
+        light.color = [rang.gen_range(0.1..1.0), rang.gen_range(0.1..1.0), rang.gen_range(0.1..1.0)];
+        light.linear_attenuation = 0.7;
+        light.quadratic_attenuation = 1.6;
+
+        println!("light #{} radius: {}", i, light.radius());
 
         lights.push(light)
     }

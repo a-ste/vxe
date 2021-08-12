@@ -11,11 +11,7 @@ shd_interface![
     normal_texture, LumTextureBinding,
     position_texture, LumTextureBinding,
     rms_texture, LumTextureBinding,
-    light_pos, [f32; 3],
-    light_color, [f32; 3],
-    light_intensity, f32,
-    light_linear, f32,
-    light_quadratic, f32
+    light_count, i32
 ];
 
 impl Shader<LightPassShader> for LightPassShader {
@@ -47,11 +43,13 @@ impl Shader<LightPassShader> for LightPassShader {
         uniform sampler2D position_texture;
         uniform sampler2D rms_texture;
 
-        uniform vec3 light_pos;
-        uniform vec3 light_color;
-        uniform float light_intensity;
-        uniform float light_linear;
-        uniform float light_quadratic;
+        uniform vec3 light_pos[50];
+        uniform vec3 light_color[50];
+        uniform float light_intensity[50];
+        uniform float light_linear[50];
+        uniform float light_quadratic[50];
+        uniform float light_radius[50];
+        uniform int light_count;
 
         out vec4 frag_color;
 
@@ -65,21 +63,24 @@ impl Shader<LightPassShader> for LightPassShader {
             vec3 lighting = vec3(0.0, 0.0, 0.0);
             vec3 view_dir = normalize(camera_pos - frag_pos);
 
+            for (int i = 0; i < light_count; i++) {
+                float distance = length(light_pos[i] - frag_pos);
 
-            vec3 light_dir = normalize(light_pos - frag_pos);
-            vec3 diffused = dot(normal, light_dir) * (light_color * light_intensity);
+                if(distance < light_radius[i]) {
+                    vec3 light_dir = normalize(light_pos[i] - frag_pos);
+                    vec3 diffused = dot(normal, light_dir) * (light_color[i] * light_intensity[i]);
 
-            vec3 halfway_dir = normalize(light_dir + view_dir);
-            float spec = pow(max(dot(normal, halfway_dir), 0.0), 16.0);
-            vec3 speculared = light_color * spec * specular;
+                    vec3 halfway_dir = normalize(light_dir + view_dir);
+                    float spec = pow(max(dot(normal, halfway_dir), 0.0), 16.0);
+                    vec3 speculared = light_color[i] * spec * specular;
 
-            float distance = length(light_pos - frag_pos);
-            float attenuation = 1.0 / (1.0 + light_linear * distance + light_quadratic * distance * distance);
+                    float attenuation = 1.0 / (1.0 + light_linear[i] * distance + light_quadratic[i] * distance * distance);
 
-            diffused *= attenuation;
-            speculared *= attenuation;
-            lighting += diffused + speculared;
-
+                    diffused *= attenuation;
+                    speculared *= attenuation;
+                    lighting += diffused + speculared;
+                }
+            }
 
             frag_color = vec4(lighting, 1.0);
         }
@@ -95,12 +96,16 @@ impl Shader<LightPassShader> for LightPassShader {
         map.insert("position_texture".to_string(), UniformParameter::Texture(&self.position_texture));
         map.insert("rms_texture".to_string(), UniformParameter::Texture(&self.rms_texture));
 
-        map.insert("light_pos".to_string(), UniformParameter::Vector3(&self.light_pos));
-        map.insert("light_color".to_string(), UniformParameter::Vector3(&self.light_color));
-        map.insert("light_intensity".to_string(), UniformParameter::Float(&self.light_intensity));
+        map.insert("light_pos".to_string(), UniformParameter::Vector3Array(50));
+        map.insert("light_color".to_string(), UniformParameter::Vector3Array(50));
+        map.insert("light_intensity".to_string(), UniformParameter::FloatArray(50));
 
-        map.insert("light_linear".to_string(), UniformParameter::Float(&self.light_linear));
-        map.insert("light_quadratic".to_string(), UniformParameter::Float(&self.light_quadratic));
+        map.insert("light_linear".to_string(), UniformParameter::FloatArray(50));
+        map.insert("light_quadratic".to_string(), UniformParameter::FloatArray(50));
+        map.insert("light_radius".to_string(), UniformParameter::FloatArray(50));
+
+
+        map.insert("light_count".to_string(), UniformParameter::Integer(&self.light_count));
 
         map
     }
